@@ -3,8 +3,6 @@ import DisplayWishList from '../ui/wishlist/DisplayWishList';
 import EmptyWishlist from '../ui/wishlist/EmptyWishlist';
 
 function Wishlist() {
-  // const [wishlist, setWishlist] = useState(items);
-
   const { wishlist } = useWishlist();
   console.log(wishlist);
 

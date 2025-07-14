@@ -57,7 +57,18 @@ function WishlistProduct({ product, onClick }) {
     }
   }
 
-  function handleRemove() {}
+  async function handleRemove() {
+    setLoading(true);
+
+    try {
+      const newWishlist = await removeWishlistItem({ userId, productId: _id });
+      if (Array.isArray(newWishlist)) setWishlist(newWishlist);
+    } catch (error) {
+      console.error('Error removing item from wishlist', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div onClick={onClick} className="relative w-55 border-1 border-zinc-200">

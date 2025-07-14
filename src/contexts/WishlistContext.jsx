@@ -9,7 +9,7 @@ export function WishlistProvider({ children }) {
   const [wishlist, setWishlist] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  console.log(wishlist);
+  // console.log(wishlist);
 
   useEffect(() => {
     if (!userId) return;

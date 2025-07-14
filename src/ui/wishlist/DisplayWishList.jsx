@@ -1,4 +1,3 @@
-import { items } from '../../data/sample-wishlist';
 import WishlistProduct from './WishlistProduct';
 
 function DisplayWishList({ wishlist }) {

@@ -35,8 +35,27 @@ function CartAction({ cart, setCart, selectedItems }) {
 
   const [loading, setLoading] = useState(false);
 
-  function handleRemove() {
-    setCart([]);
+  async function handleRemove() {
+    if (selectedItems.length === 0) return;
+
+    setLoading(true);
+
+    try {
+      for (const { product, selectedSize } of selectedItems) {
+        await removeCartItem({
+          userId,
+          productId: product._id,
+          size: selectedSize,
+        });
+      }
+
+      const newCart = await getCartItems(userId);
+      setCart(transformCartItems(newCart));
+    } catch (error) {
+      console.error('Error removing from the cart', error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handleAddToWishlist() {

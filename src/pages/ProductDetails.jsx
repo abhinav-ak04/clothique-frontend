@@ -1,22 +1,38 @@
+import { useLocation, useParams } from 'react-router-dom';
 import { product } from '../data/sample-product';
 import ProductDesc from '../ui/product-details/ProductDesc';
 import ProductImages from '../ui/product-details/ProductImages';
+import { useEffect, useState } from 'react';
+import { getProductById } from '../api/product';
 
 function ProductDetails() {
-  // const { productId } = useParams();
-  // const location = useLocation();
-  // const [product, setProduct] = useState(location.state?.item || null);
+  const { productId } = useParams();
+  // console.log('aaaaa', productId, +productId);
+  const location = useLocation();
 
-  // useEffect(() => {
-  //   // If product is null (user refreshed or came directly), fetch data
-  //   if (!product) {
-  //     fetch(`/api/products/${productId}`)
-  //       .then(res => res.json())
-  //       .then(data => setProduct(data));
-  //   }
-  // }, [productId, product]);
+  const [product, setProduct] = useState(location.state?.product || null);
+  const [loading, setLoading] = useState(!product);
+  const [error, setError] = useState(null);
 
-  // if (!product) return <p>Loading...</p>;
+  useEffect(() => {
+    if (product) return;
+
+    setLoading(true);
+    const fetchProduct = async () => {
+      try {
+        const { product } = await getProductById(productId);
+        setProduct(product);
+      } catch (error) {
+        setError('Error fetching product');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [productId, product]);
+
+  if (loading) return <p className="p-10 text-xl">Loading Details...</p>;
+  if (error) return <p className="p-10 text-red-500">Error occured: {error}</p>;
 
   const { imgs, mainCategory, subCategory, individualCategory, gender } =
     product;

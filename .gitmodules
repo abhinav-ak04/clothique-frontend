@@ -1,0 +1,6 @@
+[submodule "clothique-frontend"]
+	path = clothique-frontend
+	url = https://github.com/abhinav-ak04/clothique-frontend
+[submodule "clothique-backend"]
+	path = clothique-backend
+	url = https://github.com/abhinav-ak04/clothique-backend

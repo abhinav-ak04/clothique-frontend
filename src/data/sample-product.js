@@ -1,0 +1,51 @@
+export const product = {
+  productId: 10,
+  imgs: [
+    'https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/9869597/2019/8/2/4361b45a-3ab5-44b2-823d-8082cdf933471564721523481-Mast--Harbour-Men-Shirts-7501564721521568-1.jpg',
+    'https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/9869597/2019/8/2/143f0afa-056a-425a-9e78-3e0df0d308051564721523460-Mast--Harbour-Men-Shirts-7501564721521568-2.jpg',
+    'https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/9869597/2019/8/2/b14a227d-80d2-487c-8b29-37746126648f1564721523436-Mast--Harbour-Men-Shirts-7501564721521568-3.jpg',
+    'https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/9869597/2019/8/2/701d75e9-69d6-4a9b-8ce7-f0794d2867d51564721523414-Mast--Harbour-Men-Shirts-7501564721521568-4.jpg',
+    'https://assets.myntassets.com/h_720,q_90,w_540/v1/assets/images/9869597/2019/8/2/ec80d6bd-a45c-45d1-97e5-2114b3ffc2ac1564721523400-Mast--Harbour-Men-Shirts-7501564721521568-5.jpg',
+  ],
+  brand: 'Mast & Harbour',
+  desc: 'Men Blue &Off White Checked Pure Cotton Casual Shirt',
+  details: [
+    'Blue and Off White checked casual shirt',
+    'has a slim collar',
+    'long sleeves',
+    'button placket',
+    'and curved hem',
+  ],
+
+  mainCategory: 'Clothing',
+  subCategory: 'Topwear',
+  individualCategory: 'Casual Shirts',
+  gender: 'Men',
+  sizeAndFit: ['Regular Fit', "The model (height 6') is wearing a size 40"],
+  materialAndCare: ['100% cotton', 'Machine-wash'],
+  specs: [
+    { prop: 'Sleeve Length', value: 'Long Sleeves' },
+    { prop: 'Collar', value: 'Slim Collar' },
+    { prop: 'Fit', value: 'Regular Fit' },
+    { prop: 'Occasion', value: 'Casual' },
+    { prop: 'Print or Pattern Type', value: 'Other Checks' },
+    { prop: 'Length', value: 'Regular' },
+  ],
+  seller: 'PREMIER APPARELS - SJIT',
+  deliveryDuration: 4,
+
+  discountPrice: 899,
+  originalPrice: 2199,
+  discount: 'Rs. 1300 OFF',
+  ratings: [1227, 514, 245, 104, 235], // 5-star to 1-star ratings
+  sizes: [
+    { size: '36', isAvailable: true },
+    { size: '38', isAvailable: true },
+    { size: '40', isAvailable: false },
+    { size: '42', isAvailable: true },
+    { size: '44', isAvailable: false },
+  ],
+  color: 'Blue',
+  createdAt: '2024-06-22T00:00:00Z',
+  popularityScore: 132,
+};

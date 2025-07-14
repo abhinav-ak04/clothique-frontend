@@ -1,13 +1,11 @@
+import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { product } from '../data/sample-product';
+import { getProductById } from '../api/product';
 import ProductDesc from '../ui/product-details/ProductDesc';
 import ProductImages from '../ui/product-details/ProductImages';
-import { useEffect, useState } from 'react';
-import { getProductById } from '../api/product';
 
 function ProductDetails() {
   const { productId } = useParams();
-  // console.log('aaaaa', productId, +productId);
   const location = useLocation();
 
   const [product, setProduct] = useState(location.state?.product || null);
@@ -22,8 +20,8 @@ function ProductDetails() {
       try {
         const { product } = await getProductById(productId);
         setProduct(product);
-      } catch (error) {
-        setError('Error fetching product');
+      } catch (e) {
+        setError(`Error fetching product: ${e}`);
       } finally {
         setLoading(false);
       }

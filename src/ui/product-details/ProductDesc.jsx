@@ -10,6 +10,7 @@ import Ratings from './product-desc/Ratings';
 
 function ProductDesc({ product }) {
   const {
+    _id,
     productId,
     brand,
     desc,
@@ -56,7 +57,7 @@ function ProductDesc({ product }) {
         sizeSelected={sizeSelected}
         setSizeSelected={setSizeSelected}
       />
-      <Actions />
+      <Actions _id={_id} sizeSelected={sizeSelected} />
       {sizeSelected && (
         <Summary
           discount={discount}

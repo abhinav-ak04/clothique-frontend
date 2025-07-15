@@ -1,13 +1,9 @@
 import { HiOutlineSparkles } from 'react-icons/hi2';
 import { IoIosStar } from 'react-icons/io';
+import { getRatings } from '../../../utils/ratings-calculator';
 
 function ProductDescRatings({ ratings }) {
-  const [five, four, three, two, one] = ratings;
-  const totalRatings = one + two + three + four + five;
-  const overallRating = (
-    (5 * five + 4 * four + 3 * three + 2 * two + 1 * one) /
-    totalRatings
-  ).toFixed(1);
+  const { overallRating, totalRatings } = getRatings(ratings);
 
   const ratingColors = {
     5: 'bg-teal-600',

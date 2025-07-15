@@ -1,9 +1,8 @@
-import { results } from '../../data/sample-results';
 import ResultProduct from './ResultProduct';
-function DisplayResult() {
+function DisplayResult({ products }) {
   return (
     <div className="m-6 flex flex-wrap justify-between gap-10">
-      {results.map((product) => (
+      {products.map((product) => (
         <ResultProduct key={product.productId} product={product} />
       ))}
     </div>

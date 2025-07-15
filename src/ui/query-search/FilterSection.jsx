@@ -1,7 +1,18 @@
 import { useSearchParams } from 'react-router-dom';
 
-function FilterSection({ section }) {
-  const { title, items, inputType } = section;
+function FilterSection({ section, filters }) {
+  const { title, inputType } = section;
+
+  const titleMap = {
+    brand: 'brand',
+    color: 'color',
+    type: 'gender',
+    categories: 'individualCategory',
+    discount: 'discount',
+  };
+
+  const items = Object.entries(filters[titleMap[section.title]]);
+
   const newTitle = capitalizeFirstLetter(title);
   const [searchParams, setSearchParams] = new useSearchParams();
 
@@ -32,35 +43,35 @@ function FilterSection({ section }) {
       {newTitle != 'Type' && (
         <h1 className="mb-1.5 text-base font-bold">{newTitle}</h1>
       )}
-      {items.map((item, idx) => (
+      {items.map(({ name, count }, idx) => (
         <div className="flex items-center gap-3 p-0.5 py-1" key={idx}>
           {inputType == 'radio' ? (
             <>
               <input
                 type="radio"
                 name={title}
-                value={item}
-                id={item}
-                checked={searchParams.get(title) === item}
+                value={name}
+                id={name}
+                checked={searchParams.get(title) === name}
                 onChange={(e) => handleChange(e.target.value)}
                 className={`checked:bg-core-theme checked:outline-core-theme h-3 w-3 cursor-pointer appearance-none rounded-full outline outline-offset-3 outline-zinc-400 transition-opacity outline-solid checked:border-transparent`}
               />
               <label
                 className={`w-full text-sm ${title === 'type' && 'font-bold'}`}
-                htmlFor={item}
+                htmlFor={name}
               >
-                {item}
+                {name}
               </label>
             </>
           ) : (
             <label className="relative mb-1 block w-full cursor-pointer pl-7 text-[14px] leading-none">
-              {item}
+              {`${name} (${count})`}
               <input
                 type="checkbox"
                 name={title}
-                value={item}
-                id={item}
-                checked={searchParams.getAll(title).includes(item)}
+                value={name}
+                id={name}
+                checked={searchParams.getAll(title).includes(name)}
                 onChange={(e) => handleChange(e.target.value)}
                 className="peer absolute h-0 w-0"
               />

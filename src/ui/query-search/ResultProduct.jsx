@@ -5,9 +5,15 @@ import { useNavigate } from 'react-router-dom';
 import { getRatings } from '../../utils/ratings-calculator';
 import { getSlicedString } from '../../utils/string-slicer';
 import { getFirstAvailableSize } from '../../utils/default-size-getter';
+import { sliceNumberToThousands } from '../../utils/thousand-slicer';
+import { addToWishlist } from '../../api/wishlist';
+import { useUser } from '../../contexts/UserContext';
+import { useWishlist } from '../../contexts/WishlistContext';
+import { FaHeart } from 'react-icons/fa';
 
 function ResultProduct({ product }) {
   const {
+    _id,
     productId,
     brand,
     imgs,
@@ -19,7 +25,12 @@ function ResultProduct({ product }) {
     sizes,
   } = product;
 
+  const { userId } = useUser();
+  const { wishlist, setWishlist } = useWishlist();
+
   const [isHover, setIsHover] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const newDesc = getSlicedString(desc, 30);
@@ -28,7 +39,25 @@ function ResultProduct({ product }) {
 
   function handleProductClick() {
     // navigate(`/product/${productId}`, { state: { item } });
-    navigate(`/product/${productId}`);
+    navigate(`/product/${productId}`, { state: { product } });
+  }
+
+  const isInWishlist = wishlist.some(({ product }) => product._id === _id);
+
+  async function handleAddToWishlist(e) {
+    e.stopPropagation();
+
+    if (isInWishlist) return;
+
+    setLoading(true);
+    try {
+      const newWishlist = await addToWishlist({ userId, productId: _id });
+      setWishlist(newWishlist);
+    } catch (error) {
+      console.error('Error adding to bag', error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -45,16 +74,29 @@ function ResultProduct({ product }) {
             <span className="text-xs font-bold">{overallRating}</span>
             <FaStar className="text-xs text-teal-600" />
             <span className="text-xs">|</span>
-            <span className="text-xs font-bold">{totalRatings}</span>
+            <span className="text-xs font-bold">
+              {sliceNumberToThousands(totalRatings)}
+            </span>
           </div>
         </div>
       )}
       <div className="mt-2">
         {isHover && (
           <div className="absolute top-63 w-full rounded-xs bg-white py-2">
-            <div className="m-2 flex items-center justify-center gap-2 rounded-xs border-1 border-zinc-300 py-1.5 hover:border-zinc-500">
-              <CiHeart className="text-xl" />
-              <span className="text-xs font-bold text-zinc-800">WISHLIST</span>
+            <div
+              className={`m-2 flex items-center justify-center gap-2 rounded-xs border-1 border-zinc-300 py-1.5 ${isInWishlist ? 'bg-gray-700 py-2' : 'hover:border-zinc-500'} `}
+              onClick={(e) => handleAddToWishlist(e)}
+            >
+              {isInWishlist ? (
+                <FaHeart className="text-core-theme" />
+              ) : (
+                <CiHeart className="text-xl" />
+              )}
+              <span
+                className={`text-xs font-bold ${isInWishlist ? 'text-white' : 'text-zinc-800'}`}
+              >
+                {isInWishlist ? 'WISHLISTED' : 'WISHLIST'}
+              </span>
             </div>
             <h1 className="pl-3 text-sm text-zinc-500">Sizes: {defaultSize}</h1>
           </div>
@@ -69,7 +111,7 @@ function ResultProduct({ product }) {
             Rs. {originalPrice}
           </span>
           <span className="text-xs leading-none text-orange-400">
-            ({discount}% OFF)
+            ({discount})
           </span>
         </div>
       </div>

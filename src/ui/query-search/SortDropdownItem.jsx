@@ -5,7 +5,7 @@ function SortDropdownItem({ title, sortValue, sortby, setSortby }) {
   function handleClick() {
     setSortby(title);
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set('sortby', sortValue);
+    newSearchParams.set('sortBy', sortValue);
     setSearchParams(newSearchParams);
   }
   return (

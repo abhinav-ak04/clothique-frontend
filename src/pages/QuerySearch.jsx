@@ -44,7 +44,10 @@ function QuerySearch() {
   }, [searchParams]);
 
   function handleClearFilters() {
-    setSearchParams(new URLSearchParams());
+    const query = searchParams.get('q');
+    const newParams = new URLSearchParams();
+    if (query) newParams.set('q', query);
+    setSearchParams(newParams);
   }
 
   if (nbHits === 0) return <p className="m-3 text-xl">No products found...</p>;

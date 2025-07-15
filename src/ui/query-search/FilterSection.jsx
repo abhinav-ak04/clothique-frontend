@@ -13,6 +13,8 @@ function FilterSection({ section, filters }) {
 
   const items = Object.entries(filters[titleMap[section.title]]);
 
+  console.log('aaaaaaaaaaaaaaaa', items);
+
   const newTitle = capitalizeFirstLetter(title);
   const [searchParams, setSearchParams] = new useSearchParams();
 
@@ -43,7 +45,7 @@ function FilterSection({ section, filters }) {
       {newTitle != 'Type' && (
         <h1 className="mb-1.5 text-base font-bold">{newTitle}</h1>
       )}
-      {items.map(({ name, count }, idx) => (
+      {items.map(([name, count], idx) => (
         <div className="flex items-center gap-3 p-0.5 py-1" key={idx}>
           {inputType == 'radio' ? (
             <>

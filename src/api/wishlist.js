@@ -22,3 +22,10 @@ export async function addToWishlist({ userId, productId }) {
   });
   return response.data.wishlist.items;
 }
+
+export async function isInWishlist({ userId, productId }) {
+  const response = await axios.get(
+    `/wishlist/exists?userId=${userId}&productId=${productId}`,
+  );
+  return response.data;
+}

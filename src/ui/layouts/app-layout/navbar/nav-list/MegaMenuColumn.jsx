@@ -5,7 +5,7 @@ function MegaMenuColumn({ headingColor, title, links }) {
     <div className="">
       <NavLink
         className={`text-[15px] font-bold ${headingColor}`}
-        to={title.url}
+        to={`/search?q=${title.keyword}`}
       >
         {title.name}
       </NavLink>
@@ -15,7 +15,7 @@ function MegaMenuColumn({ headingColor, title, links }) {
           <NavLink
             className="text-[15px] font-medium text-gray-700 transition-transform hover:scale-102 hover:font-semibold hover:text-gray-950"
             key={link.id}
-            to={link.url}
+            to={`/search?q=${link.keyword}`}
           >
             {link.name}
           </NavLink>

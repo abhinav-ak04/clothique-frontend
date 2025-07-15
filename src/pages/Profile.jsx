@@ -1,7 +1,30 @@
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { userData } from '../data/sample-user';
+import { getUserData } from '../api/user';
+import { useUser } from '../contexts/UserContext';
 
 function Profile() {
+  const { userId } = useUser();
+
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      setLoading(true);
+      try {
+        const { user: userData } = await getUserData(userId);
+        setUserData(userData);
+      } catch (error) {
+        console.error('Error fetching user details', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (userId) fetchUserDetails();
+  }, [userId]);
+
   const fieldMap = [
     { key: 'name', label: 'Full Name' },
     { key: 'mobileNo', label: 'Mobile Number' },
@@ -14,6 +37,10 @@ function Profile() {
 
   const genderMap = { M: 'MALE', F: 'FEMALE' };
 
+  const dob = new Date(userData.dob).toLocaleDateString('en-GB');
+  const modifiedUserData = { ...userData, dob: dob };
+  console.log('pppp', dob);
+
   return (
     <div className="m-4 flex w-[730px] justify-center border-1 border-zinc-200 py-10">
       <div className="w-120">
@@ -24,10 +51,10 @@ function Profile() {
           <div className="mb-6 flex text-zinc-900" key={idx}>
             <p className="w-48 pl-7">{label}</p>
             <p className="">
-              {userData[key].length > 0
+              {modifiedUserData[key].length > 0
                 ? key === 'gender'
-                  ? genderMap[userData[key]]
-                  : userData[key]
+                  ? genderMap[modifiedUserData[key]]
+                  : modifiedUserData[key]
                 : '- not added -'}
             </p>
           </div>

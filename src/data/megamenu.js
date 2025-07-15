@@ -4,7 +4,7 @@ export const megamenu = {
       categoryId: 1,
       title: { name: 'Topwear', keyword: 'topwear' },
       links: [
-        { id: 1, name: 'T-Shirts', keyword: 'tshirt' },
+        { id: 1, name: 'T-Shirts', keyword: 't-shirt' },
         { id: 2, name: 'Casual Shirts', keyword: 'casual shirt' },
         { id: 3, name: 'Formal Shirts', keyword: 'formal shirt' },
         { id: 4, name: 'Sweatshirts', keyword: 'sweatshirt' },
@@ -41,7 +41,7 @@ export const megamenu = {
       title: { name: 'Sports & Active Wear', keyword: 'sports active' },
       links: [
         { id: 1, name: 'Sports Shoes', keyword: 'sports shoe' },
-        { id: 3, name: 'Active T-Shirts', keyword: 'active tshirt' },
+        { id: 3, name: 'Active T-Shirts', keyword: 'active t-shirt' },
         { id: 5, name: 'Tracksuits', keyword: 'tracksuit' },
         { id: 6, name: 'Sports Accessories', keyword: 'sports accessory' },
       ],
@@ -72,7 +72,7 @@ export const megamenu = {
       links: [
         { id: 1, name: 'Dresses', keyword: 'dress' },
         { id: 2, name: 'Tops', keyword: 'tops' },
-        { id: 3, name: 'T-Shirts', keyword: 'tshirt' },
+        { id: 3, name: 'T-Shirts', keyword: 't-shirt' },
         { id: 4, name: 'Jeans', keyword: 'jeans' },
         { id: 5, name: 'Trousers & Capris', keyword: 'trouser capri' },
         { id: 5, name: 'Jumpsuits', keyword: 'jumpsuit' },
@@ -116,7 +116,7 @@ export const megamenu = {
       categoryId: 1,
       title: { name: 'Boys Clothing', keyword: 'boy' },
       links: [
-        { id: 1, name: 'T-Shirts', keyword: 'tshirt' },
+        { id: 1, name: 'T-Shirts', keyword: 't-shirt' },
         { id: 2, name: 'Shirts', keyword: 'shirt' },
         { id: 3, name: 'Shorts', keyword: 'short' },
         { id: 4, name: 'Jeans', keyword: 'jeans' },
@@ -131,7 +131,7 @@ export const megamenu = {
       links: [
         { id: 1, name: 'Dresses', keyword: 'dress' },
         { id: 2, name: 'Tops', keyword: 'tops' },
-        { id: 3, name: 'T-Shirts', keyword: 'tshirt' },
+        { id: 3, name: 'T-Shirts', keyword: 't-shirt' },
         { id: 4, name: 'Lehenga Choli', keyword: 'lehenga choli' },
         { id: 5, name: 'Kurta Sets', keyword: 'kurta set' },
         { id: 5, name: 'Skirts & Shorts', keyword: 'skirt short' },
@@ -157,7 +157,7 @@ export const megamenu = {
         { id: 1, name: 'Bodysuits', keyword: 'bodysuit' },
         { id: 2, name: 'Rompers & Sleepsuits', keyword: 'romper sleepsuit' },
         { id: 3, name: 'Clothing Sets', keyword: 'clothing set' },
-        { id: 4, name: 'T-Shirts & Tops', keyword: 'tshirt top' },
+        { id: 4, name: 'T-Shirts & Tops', keyword: 't-shirt top' },
         { id: 5, name: 'Dresses', keyword: 'dress' },
         { id: 6, name: 'Infant Care', keyword: 'infant care' },
       ],

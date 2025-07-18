@@ -10,7 +10,7 @@ export function UserProvider({ children }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get(`/user/${userId}`);
+        const res = await axios.get(`/user/get/${userId}`);
         setUserData(res.user);
       } catch (error) {
         console.error('Error fetching user data', error);

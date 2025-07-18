@@ -1,26 +1,82 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaCheck } from 'react-icons/fa6';
-import { userData } from '../data/sample-user';
+import { getUserData, updateUserData } from '../api/user';
+import { useUser } from '../contexts/UserContext';
 import MobileInput from '../ui/shared/MobileInput';
 import TextInput from '../ui/shared/TextInput';
+import {
+  getISODateStringFromReadable,
+  getReadableDateString,
+} from '../utils/date-utils';
 import { isDOBValid } from '../utils/dob-verifier';
 import { isEmailValid } from '../utils/email-verifier';
 import { isMobileNoValid } from '../utils/mobileno-verifier';
 import { isNameValid } from '../utils/name-verifier';
+import { useNavigate } from 'react-router-dom';
 
 function ProfileEdit() {
-  const [name, setName] = useState(userData.name);
-  const [mobileNo, setMobileNo] = useState(userData.mobileNo);
-  const [email, setEmail] = useState(userData.email);
-  const [gender, setGender] = useState(userData.gender);
-  const [dob, setDob] = useState(userData.dob);
-  const [alterMobNo, setAlterMobNo] = useState(userData.alternateMobileNo);
+  const { userId } = useUser();
+  const navigate = useNavigate();
+
+  const [userData, setUserData] = useState({
+    name: '',
+    mobileNo: '',
+    email: '',
+    gender: '',
+    dob: '',
+    alternateMobileNo: '',
+  });
+  const [loading, setLoading] = useState(false);
+
+  const [name, setName] = useState(null);
+  const [mobileNo, setMobileNo] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [gender, setGender] = useState(null);
+  const [dob, setDob] = useState(null);
+  const [alterMobNo, setAlterMobNo] = useState(null);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      setLoading(true);
+      try {
+        const { user } = await getUserData(userId);
+        console.log('kkkkkkk', user);
+
+        const transformedDob = getReadableDateString(user.dob);
+        console.log('mmmmmmmmmmm', user.dob, transformedDob);
+        const modifiedUserData = { ...user, dob: transformedDob };
+
+        setUserData(modifiedUserData);
+
+        setName(userData.name);
+        setMobileNo(userData.mobileNo);
+        setEmail(userData.email);
+        setGender(userData.gender);
+        setDob(userData.dob);
+        setAlterMobNo(userData.alternateMobileNo);
+      } catch (error) {
+        console.error('Error occured fetching user data', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserDetails();
+  }, [
+    userData.alternateMobileNo,
+    userData.dob,
+    userData.email,
+    userData.gender,
+    userData.mobileNo,
+    userData.name,
+    userId,
+  ]);
 
   const [errors, setErrors] = useState({});
 
   function resetStates() {}
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const newErrors = {};
@@ -46,9 +102,32 @@ function ProfileEdit() {
       return;
     }
 
-    console.log('Form submitted successfully');
+    try {
+      setLoading(true);
+
+      const newUserData = {
+        name,
+        mobileNo,
+        email,
+        gender,
+        dob: getISODateStringFromReadable(dob),
+        alternateMobileNo: alterMobNo,
+      };
+      console.log('Form submitted successfully', newUserData);
+
+      const { user } = await updateUserData(userId, newUserData);
+      console.log('Data updated successfully!!', user);
+
+      navigate(`/my/profile`);
+    } catch (error) {
+      console.error('Error updating user details...', error);
+    } finally {
+      setLoading(false);
+    }
     resetStates();
   }
+
+  if (!userData.mobileNo) return <p>Loading Current Data...</p>;
 
   return (
     <div className="m-4 w-[730px] border-1 border-zinc-200">

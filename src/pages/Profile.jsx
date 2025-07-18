@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { getUserData } from '../api/user';
 import { useUser } from '../contexts/UserContext';
+import { getReadableDateString } from '../utils/date-utils';
 
 function Profile() {
   const { userId } = useUser();
@@ -13,8 +14,13 @@ function Profile() {
     const fetchUserDetails = async () => {
       setLoading(true);
       try {
-        const { user: userData } = await getUserData(userId);
-        setUserData(userData);
+        const { user } = await getUserData(userId);
+        console.log('kkkkkkk', user);
+
+        const transformedDob = getReadableDateString(user.dob);
+        const modifiedUserData = { ...user, dob: transformedDob };
+
+        setUserData(modifiedUserData);
       } catch (error) {
         console.error('Error fetching user details', error);
       } finally {
@@ -37,9 +43,7 @@ function Profile() {
 
   const genderMap = { M: 'MALE', F: 'FEMALE' };
 
-  const dob = new Date(userData.dob).toLocaleDateString('en-GB');
-  const modifiedUserData = { ...userData, dob: dob };
-  console.log('pppp', dob);
+  if (userData === null) return <p>Loading User data</p>;
 
   return (
     <div className="m-4 flex w-[730px] justify-center border-1 border-zinc-200 py-10">
@@ -51,10 +55,10 @@ function Profile() {
           <div className="mb-6 flex text-zinc-900" key={idx}>
             <p className="w-48 pl-7">{label}</p>
             <p className="">
-              {modifiedUserData[key].length > 0
+              {userData[key].length > 0
                 ? key === 'gender'
-                  ? genderMap[modifiedUserData[key]]
-                  : modifiedUserData[key]
+                  ? genderMap[userData[key]]
+                  : userData[key]
                 : '- not added -'}
             </p>
           </div>

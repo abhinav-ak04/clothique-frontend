@@ -11,3 +11,14 @@ export function getDeliveryDateString(deliveryDuration) {
 
   return deliveryDateString;
 }
+
+export function getReadableDateString(date) {
+  const transformedDate = new Date(date).toLocaleDateString('en-GB');
+  return transformedDate;
+}
+
+export function getISODateStringFromReadable(dateString) {
+  const [day, month, year] = dateString.split('/');
+  const isoString = new Date(`${year}-${month}-${day}`).toISOString();
+  return isoString;
+}

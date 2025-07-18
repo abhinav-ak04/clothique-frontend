@@ -1,14 +1,18 @@
-import { useState } from 'react';
-import useAddresses from '../hooks/useAddresses';
+import { useEffect, useState } from 'react';
+import { useAddresses } from '../contexts/AddressContext.jsx';
 import NoAddressFallback from '../ui/my-addresses/NoAddressFallback';
 import SelectProfileAddress from '../ui/my-addresses/SelectProfileAddress';
 
 function MyAddresses() {
   const { defaultAddress, otherAddresses } = useAddresses();
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
-  const [selectedAddress, setSelectedAddress] = useState(
-    defaultAddress[0]?.id ?? null,
-  );
+  useEffect(() => {
+    const fetchAddresses = () => {
+      setSelectedAddress(defaultAddress[0]?._id);
+    };
+    fetchAddresses();
+  }, [defaultAddress]);
 
   const isAddressesPresent = !!selectedAddress;
 
@@ -30,12 +34,14 @@ function MyAddresses() {
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}
           />
-          <SelectProfileAddress
-            heading="OTHER ADDRESSES"
-            addressList={otherAddresses}
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
-          />
+          {otherAddresses.length > 0 && (
+            <SelectProfileAddress
+              heading="OTHER ADDRESSES"
+              addressList={otherAddresses}
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
+            />
+          )}
         </>
       ) : (
         <NoAddressFallback />

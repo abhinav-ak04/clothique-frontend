@@ -1,8 +1,57 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaRegMoneyBillAlt } from 'react-icons/fa';
+import { getAddressById } from '../../api/address';
+import { placeOrder } from '../../api/order';
+import { useUser } from '../../contexts/UserContext';
+import { getPriceSummary } from '../../utils/price-calculator';
 import NavigateButton from '../shared/buttons/NavigateButton';
 
-function PaymentMethods() {
+function PaymentMethods({ selectedItems, donation, selectedAddress }) {
+  const { userId } = useUser();
+
+  const [loading, setLoading] = useState(false);
+  const [orderAddress, setOrderAddress] = useState(null);
+
+  useEffect(() => {
+    const fetchAddress = async () => {
+      try {
+        setLoading(true);
+        const { address } = await getAddressById(selectedAddress);
+        setOrderAddress(address);
+      } catch (error) {
+        console.error('Error fetching address details', error);
+        setLoading(false);
+        return;
+      }
+    };
+    if (selectedAddress) fetchAddress();
+  }, [selectedAddress]);
+
+  async function handlePlaceOrder() {
+    console.log('dekho', { selectedAddress, donation, selectedItems });
+
+    const products = selectedItems.map((product, quantity, selectedSize) => ({
+      product: product._id,
+      quantity,
+      size: selectedSize,
+    }));
+
+    const { finalPrice } = getPriceSummary(selectedItems);
+
+    const { addressLine, locality, city, state, pincode } = orderAddress;
+    const addressString = `${addressLine}, ${locality}, ${city}, ${state} - ${pincode}`;
+
+    const newOrder = {
+      userId,
+      products,
+      totalAmount: finalPrice,
+      deliveryAddress: addressString,
+    };
+
+    const { order } = await placeOrder(newOrder);
+    console.log('oolalala', order);
+  }
+
   const [payemntMethod, setPaymentMethod] = useState(null);
   const isSelected = (method) => payemntMethod === method;
 
@@ -36,7 +85,9 @@ function PaymentMethods() {
             </p>
           </div>
           {isSelected('cod') && (
-            <NavigateButton onClick="">PLACE ORDER </NavigateButton>
+            <NavigateButton onClick={handlePlaceOrder}>
+              PLACE ORDER
+            </NavigateButton>
           )}
         </div>
       </div>

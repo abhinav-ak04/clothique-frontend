@@ -5,7 +5,6 @@ import OrderSummary from '../ui/cart/OrderSummary';
 
 function Cart() {
   const { cart, setCart } = useCart();
-  console.log('Cart:', cart);
   const [pincode, setPincode] = useState('1');
 
   const selectedItems = cart.filter((item) => item.isSelected);

@@ -4,21 +4,21 @@ import PriceSummary from '../ui/shared/PriceSummary';
 
 function Payment() {
   const location = useLocation();
-  const { selectedItems, donation } = location.state || {
+  const { selectedItems, donation, selectedAddress } = location.state || {
     selectedItems: [],
     donation: 0,
+    selectedAddress: '',
   };
 
   return (
     <div className="mx-30 flex px-2.5">
-      <PaymentMethods />
+      <PaymentMethods
+        selectedItems={selectedItems}
+        donation={donation}
+        selectedAddress={selectedAddress}
+      />
       <div className="ml-5 grow">
-        <PriceSummary
-          selectedItems={selectedItems}
-          donation={donation}
-          navigatingMessage="CONTINUE"
-          navigateTo="/checkout/payment"
-        />
+        <PriceSummary selectedItems={selectedItems} donation={donation} />
       </div>
     </div>
   );

@@ -1,14 +1,13 @@
+import { useState } from 'react';
 import { IoIosCheckbox } from 'react-icons/io';
 import { MdOutlineCheckBoxOutlineBlank } from 'react-icons/md';
 import { RiCheckboxIndeterminateFill } from 'react-icons/ri';
-import CartItemCard from './CartItemCard.jsx';
-import { useState } from 'react';
-import { useUser } from '../../contexts/UserContext.jsx';
-import { addToWishlist, getWishlistItems } from '../../api/wishlist.js';
-import { useWishlist } from '../../contexts/WishlistContext.jsx';
 import { getCartItems, removeCartItem } from '../../api/cart.js';
+import { addToWishlist, getWishlistItems } from '../../api/wishlist.js';
+import { useUser } from '../../contexts/UserContext.jsx';
+import { useWishlist } from '../../contexts/WishlistContext.jsx';
 import { transformCartItems } from '../../utils/transform-cart.js';
-import { useCart } from '../../contexts/CartContext.jsx';
+import CartItemCard from './CartItemCard.jsx';
 
 function CartList({ cart, setCart, selectedItems, pincode }) {
   return (

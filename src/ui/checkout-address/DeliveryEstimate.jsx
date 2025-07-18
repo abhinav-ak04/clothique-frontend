@@ -6,11 +6,12 @@ function DeliveryEstimate({ selectedItems }) {
       <h2 className="my-3 text-[13px] font-bold text-zinc-600">
         DELIVERY ESTIMATES
       </h2>
-      {selectedItems.map(({ id, imgs, deliveryDuration }) => {
+      {selectedItems.map(({ _id, product }) => {
+        const { imgs, deliveryDuration } = product;
         const deliveryDateString = getDeliveryDateString(deliveryDuration);
         return (
           <div
-            key={id}
+            key={_id}
             className="flex items-center gap-3 border-b-1 border-dashed border-zinc-200 py-1.5"
           >
             <img src={imgs[0]} className="h-auto w-10" />

@@ -1,12 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import ActionButton from '../shared/buttons/ActionButton';
 import NavigateButton from '../shared/buttons/NavigateButton';
+import { getPriceSummary } from '../../utils/price-calculator';
 
 function PriceSummary({
   selectedItems,
   donation,
   navigatingMessage,
   navigateTo,
+  selectedAddress,
 }) {
   const navigate = useNavigate();
 
@@ -15,28 +17,13 @@ function PriceSummary({
       state: {
         selectedItems: selectedItems,
         donation: donation,
+        selectedAddress,
       },
     });
   }
 
-  const totalItems = selectedItems.length;
-
-  const totalMRP = selectedItems.reduce((mrp, { quantity, product }) => {
-    const { originalPrice } = product;
-    return mrp + originalPrice * quantity;
-  }, 0);
-
-  const totalDiscount = selectedItems.reduce(
-    (discount, { quantity, product }) => {
-      const { originalPrice, discountPrice } = product;
-      return discount + (originalPrice - discountPrice) * quantity;
-    },
-    0,
-  );
-
-  const platformFee = selectedItems.length ? 20 : 0;
-
-  const finalPrice = totalMRP - totalDiscount + platformFee + donation;
+  const { totalItems, totalMRP, totalDiscount, platformFee, finalPrice } =
+    getPriceSummary(selectedItems, donation);
 
   return (
     <div className="mt-5">
@@ -86,9 +73,11 @@ function PriceSummary({
         <p>₹{finalPrice}</p>
       </div>
 
-      <NavigateButton onClick={handlePlaceOrder}>
-        {navigatingMessage}
-      </NavigateButton>
+      {navigatingMessage && (
+        <NavigateButton onClick={handlePlaceOrder}>
+          {navigatingMessage}
+        </NavigateButton>
+      )}
     </div>
   );
 }

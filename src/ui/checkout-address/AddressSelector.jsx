@@ -1,15 +1,18 @@
-import { useState } from 'react';
-import useAddresses from '../../hooks/useAddresses';
+import { useEffect } from 'react';
+import { useAddresses } from '../../contexts/AddressContext';
 import AlterButton from '../shared/buttons/AlterButton';
 import AddressForm from './AddressForm';
 import SelectCheckoutAddress from './SelectCheckoutAddress';
 
-function AddressSelector() {
+function AddressSelector({ selectedAddress, setSelectedAddress }) {
   const { defaultAddress, otherAddresses } = useAddresses();
 
-  const [selectedAddress, setSelectedAddress] = useState(
-    defaultAddress[0]?.id ?? null,
-  );
+  useEffect(() => {
+    const fetchAddresses = () => {
+      setSelectedAddress(defaultAddress[0]?._id);
+    };
+    fetchAddresses();
+  }, [defaultAddress]);
 
   const isAddressesPresent = !!selectedAddress;
 
@@ -35,12 +38,14 @@ function AddressSelector() {
             selectedAddress={selectedAddress}
             setSelectedAddress={setSelectedAddress}
           />
-          <SelectCheckoutAddress
-            heading="OTHER ADDRESSES"
-            addressList={otherAddresses}
-            selectedAddress={selectedAddress}
-            setSelectedAddress={setSelectedAddress}
-          />
+          {otherAddresses.length > 0 && (
+            <SelectCheckoutAddress
+              heading="OTHER ADDRESSES"
+              addressList={otherAddresses}
+              selectedAddress={selectedAddress}
+              setSelectedAddress={setSelectedAddress}
+            />
+          )}
         </div>
       ) : (
         <AddressForm />

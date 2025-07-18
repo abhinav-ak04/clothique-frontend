@@ -12,8 +12,6 @@ function LayoutHead({ name, to }) {
   const headIdx = steps.findIndex((step) => step.name === name);
   const pathIdx = steps.findIndex((step) => step.path === currentPath);
 
-  console.log(headIdx, pathIdx);
-
   const isLink = headIdx < pathIdx;
   const isActive = headIdx === pathIdx;
 

@@ -22,3 +22,17 @@ export function getISODateStringFromReadable(dateString) {
   const isoString = new Date(`${year}-${month}-${day}`).toISOString();
   return isoString;
 }
+
+export function getOrderStatus(expectedDeliveryDate) {
+  const currentDate = new Date();
+  const expectedDate = new Date(expectedDeliveryDate);
+
+  // Strip the time portion by setting hours, minutes, seconds, milliseconds to 0
+  currentDate.setHours(0, 0, 0, 0);
+  expectedDate.setHours(0, 0, 0, 0);
+
+  if (expectedDate < currentDate) return 'Delivered';
+  if (expectedDate.getTime() === currentDate.getTime())
+    return 'Out for Delivery';
+  return 'Shipped';
+}

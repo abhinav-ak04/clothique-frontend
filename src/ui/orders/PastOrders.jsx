@@ -1,33 +1,28 @@
-import { orders } from '../../data/sample-orders';
+import { useOrder } from '../../contexts/OrderContext';
 import OrderItem from './past-orders/OrderItem';
+
 function PastOrders() {
+  const { orders } = useOrder();
+  console.log('oooooooooo', orders);
+
   return (
     <div className="bg-zinc-100 px-3 py-4">
-      {orders.map(
-        ({
-          orderId,
-          price,
-          status,
-          StatusIcon,
-          completionDate,
-          company,
-          description,
-          size,
-          img,
-        }) => (
-          <OrderItem
-            key={orderId}
-            price={price}
-            status={status}
-            StatusIcon={StatusIcon}
-            completionDate={completionDate}
-            company={company}
-            description={description}
-            size={size}
-            img={img}
-          />
-        ),
-      )}
+      {orders.flatMap(({ products, expectedDeliveryDate }) => {
+        return products.map(({ _id, product, size, priceAtPurchase }) => {
+          const { imgs, desc, brand } = product;
+          return (
+            <OrderItem
+              key={_id}
+              price={priceAtPurchase}
+              expectedDeliveryDate={new Date(expectedDeliveryDate)}
+              brand={brand}
+              desc={desc}
+              size={size}
+              img={imgs[0]}
+            />
+          );
+        });
+      })}
     </div>
   );
 }

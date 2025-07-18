@@ -5,6 +5,7 @@ import { CartProvider } from './contexts/CartContext.jsx';
 import { UserProvider } from './contexts/UserContext';
 import { WishlistProvider } from './contexts/WishlistContext.jsx';
 import { AddressProvider } from './contexts/AddressContext.jsx';
+import { OrderProvider } from './contexts/OrderContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -12,7 +13,9 @@ createRoot(document.getElementById('root')).render(
       <CartProvider>
         <WishlistProvider>
           <AddressProvider>
-            <App />
+            <OrderProvider>
+              <App />
+            </OrderProvider>
           </AddressProvider>
         </WishlistProvider>
       </CartProvider>

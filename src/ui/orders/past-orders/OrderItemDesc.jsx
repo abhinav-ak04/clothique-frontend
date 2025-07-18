@@ -1,14 +1,14 @@
+import { useState } from 'react';
 import { FaCircle } from 'react-icons/fa';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 import { NavLink } from 'react-router-dom';
 import StarRating from './StarRating';
-import { useState } from 'react';
 
 function OrderItemDesc({
   status,
-  completionDate,
-  company,
-  description,
+  expectedDeliveryDate,
+  brand,
+  desc,
   size,
   img,
 }) {
@@ -31,7 +31,7 @@ function OrderItemDesc({
     'Dec',
   ];
 
-  const exchangeDate = new Date(completionDate);
+  const exchangeDate = new Date(expectedDeliveryDate);
   exchangeDate.setDate(exchangeDate.getDate() + 7);
 
   return (
@@ -44,8 +44,8 @@ function OrderItemDesc({
             className="h-17 w-12 rounded-md"
           ></img>
           <div className="flex flex-col justify-center">
-            <h2 className="text-sm font-bold">{company}</h2>
-            <p className="text-sm">{description}</p>
+            <h2 className="text-sm font-bold">{brand}</h2>
+            <p className="text-sm">{desc}</p>
             <p className="text-sm">Size: {size}</p>
           </div>
         </div>
@@ -53,7 +53,7 @@ function OrderItemDesc({
           <MdKeyboardArrowRight className="text-2xl text-zinc-700" />
         </div>
       </NavLink>
-      {status == 'Delivered' && (
+      {status === 'Delivered' && (
         <div className="flex items-center gap-3 bg-zinc-100 p-3">
           <FaCircle className="text-[9px] text-neutral-500" />
           <p className="text-sm text-neutral-500">

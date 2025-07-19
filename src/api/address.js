@@ -9,3 +9,10 @@ export async function getAddressById(addressId) {
   const response = await axios.get(`/addresses/${addressId}`);
   return response.data;
 }
+
+export async function setAddressDefault(addressId, userId) {
+  const response = await axios.patch(`/addresses/${addressId}/set-default`, {
+    userId,
+  });
+  return response.data;
+}

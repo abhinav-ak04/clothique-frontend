@@ -12,13 +12,9 @@ function AddressSelector({ selectedAddress, setSelectedAddress }) {
       setSelectedAddress(defaultAddress[0]?._id);
     };
     fetchAddresses();
-  }, [defaultAddress]);
+  }, [defaultAddress, setSelectedAddress]);
 
   const isAddressesPresent = !!selectedAddress;
-
-  function handleSubmit(e) {
-    e.preventDefault();
-  }
 
   return (
     <div

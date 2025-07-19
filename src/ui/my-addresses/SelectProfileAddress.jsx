@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { getSlicedString } from '../../utils/string-slicer';
+import { setAddressDefault } from '../../api/address';
+import { useUser } from '../../contexts/UserContext';
 
 function SelectProfileAddress({
   heading,
@@ -6,12 +9,27 @@ function SelectProfileAddress({
   selectedAddress,
   setSelectedAddress,
 }) {
+  const { userId } = useUser();
+
+  const [loading, setLoading] = useState(false);
+
   function handleChange(clickedId) {
     if (clickedId === selectedAddress) return;
-    setSelectedAddress(+clickedId);
+    setSelectedAddress(clickedId);
   }
 
   const isSelected = (id) => id === selectedAddress;
+
+  async function handleSetDefault(_id) {
+    setLoading(true);
+    try {
+      const { address } = await setAddressDefault(_id, userId);
+    } catch (error) {
+      console.error('Error setting address default', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div>
@@ -31,7 +49,6 @@ function SelectProfileAddress({
           addressType,
           isDefault,
         }) => {
-          console.log('addddd', addressLine);
           return (
             <div
               key={_id}
@@ -62,7 +79,10 @@ function SelectProfileAddress({
                 )}
               </div>
               {isSelected(_id) && !isDefault && (
-                <button className="mt-3 cursor-pointer text-xs font-bold text-emerald-400">
+                <button
+                  className="mt-3 cursor-pointer text-xs font-bold text-emerald-400"
+                  onClick={() => handleSetDefault(_id)}
+                >
                   MAKE THIS DEFAULT
                 </button>
               )}

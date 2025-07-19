@@ -20,7 +20,7 @@ function AddressForm({ userId }) {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const apiKey = import.meta.env.VITE_API_KEY;
+  const apiKey = import.meta.env.VITE_PINCODE_API_KEY;
   if (!apiKey) {
     console.error(
       'API key is missing. Please set VITE_API_KEY in your .env file.',
@@ -60,6 +60,17 @@ function AddressForm({ userId }) {
     }
 
     console.log('Form submitted successfully');
+    const newAddress = {
+      name,
+      mobileNo,
+      pincode,
+      addressLine: address,
+      locality,
+      city,
+      state,
+      addressType,
+      isDefault,
+    };
     resetStates();
   }
 

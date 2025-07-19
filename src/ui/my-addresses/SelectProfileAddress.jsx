@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { getSlicedString } from '../../utils/string-slicer';
 import { setAddressDefault } from '../../api/address';
+import { useAddresses } from '../../contexts/AddressContext';
 import { useUser } from '../../contexts/UserContext';
+import { getSlicedString } from '../../utils/string-slicer';
 
 function SelectProfileAddress({
   heading,
@@ -10,6 +11,7 @@ function SelectProfileAddress({
   setSelectedAddress,
 }) {
   const { userId } = useUser();
+  const { addresses, setAddresses } = useAddresses();
 
   const [loading, setLoading] = useState(false);
 
@@ -20,10 +22,16 @@ function SelectProfileAddress({
 
   const isSelected = (id) => id === selectedAddress;
 
-  async function handleSetDefault(_id) {
+  async function handleSetDefault(addressId) {
     setLoading(true);
     try {
-      const { address } = await setAddressDefault(_id, userId);
+      const { address } = await setAddressDefault(addressId, userId);
+
+      const newAddressList = addresses.map((address) => ({
+        ...address,
+        isDefault: address._id === addressId ? true : false,
+      }));
+      setAddresses(newAddressList);
     } catch (error) {
       console.error('Error setting address default', error);
     } finally {

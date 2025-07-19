@@ -1,11 +1,17 @@
 import { useState } from 'react';
+import { addAddress } from '../../api/address';
+import { useAddresses } from '../../contexts/AddressContext';
+import { useUser } from '../../contexts/UserContext';
 import { isMobileNoValid } from '../../utils/mobileno-verifier';
 import { isNameValid } from '../../utils/name-verifier';
 import { toTitleCase } from '../../utils/title-case-generator';
 import NavigateButton from '../shared/buttons/NavigateButton';
 import TextInput from '../shared/TextInput';
 
-function AddressForm({ userId }) {
+function AddressForm() {
+  const { userId } = useUser();
+  const { addresses, setAddresses } = useAddresses();
+
   const [name, setName] = useState('');
   const [mobileNo, setMobileNo] = useState('');
   const [address, setAddress] = useState('');
@@ -18,7 +24,7 @@ function AddressForm({ userId }) {
 
   const [errors, setErrors] = useState({});
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const apiKey = import.meta.env.VITE_PINCODE_API_KEY;
   if (!apiKey) {
@@ -38,7 +44,7 @@ function AddressForm({ userId }) {
     setIsDefault(true);
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const newErrors = {};
@@ -59,19 +65,31 @@ function AddressForm({ userId }) {
       return;
     }
 
-    console.log('Form submitted successfully');
-    const newAddress = {
-      name,
-      mobileNo,
-      pincode,
-      addressLine: address,
-      locality,
-      city,
-      state,
-      addressType,
-      isDefault,
-    };
-    resetStates();
+    try {
+      const newAddress = {
+        userId,
+        name,
+        mobileNo,
+        pincode,
+        addressLine: address,
+        locality,
+        city,
+        state,
+        addressType,
+        isDefault,
+      };
+      const { addedAddress } = await addAddress(newAddress);
+
+      const newAddressList = [...addresses, addedAddress];
+      setAddresses(newAddressList);
+
+      console.log('Form submitted successfully', newAddress);
+      resetStates();
+    } catch (error) {
+      console.error('Error adding new address', error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   function clearCityState() {
@@ -94,7 +112,7 @@ function AddressForm({ userId }) {
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
     try {
       const res = await fetch(
         `https://api.data.gov.in/resource/5c2f62fe-5afa-4119-a499-fec9d604d5bd?api-key=${apiKey}&format=json&filters[pincode]=${pincode}`,
@@ -116,7 +134,7 @@ function AddressForm({ userId }) {
       newErrors.pincode = 'Error fetching city/state. Please try again.';
       clearCityState();
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   }
 
@@ -233,11 +251,7 @@ function AddressForm({ userId }) {
       </label>
 
       <div className="mx-3">
-        <NavigateButton
-          type="submit"
-          onClick={handleSubmit}
-          disabled={isLoading}
-        >
+        <NavigateButton type="submit" onClick={handleSubmit} disabled={loading}>
           SAVE ADDRESS
         </NavigateButton>
       </div>

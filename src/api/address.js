@@ -16,3 +16,8 @@ export async function setAddressDefault(addressId, userId) {
   });
   return response.data;
 }
+
+export async function addAddress(newAddress) {
+  const response = await axios.post('/addresses/add', newAddress);
+  return response.data;
+}

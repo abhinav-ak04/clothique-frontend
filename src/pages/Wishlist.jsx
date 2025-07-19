@@ -4,7 +4,6 @@ import EmptyWishlist from '../ui/wishlist/EmptyWishlist';
 
 function Wishlist() {
   const { wishlist } = useWishlist();
-  console.log(wishlist);
 
   const isWishlistEmpty = wishlist.length === 0;
 

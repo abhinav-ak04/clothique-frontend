@@ -5,12 +5,19 @@ import { placeOrder } from '../../api/order';
 import { useUser } from '../../contexts/UserContext';
 import { getPriceSummary } from '../../utils/price-calculator';
 import NavigateButton from '../shared/buttons/NavigateButton';
+import { useCart } from '../../contexts/CartContext';
+import { getCartItems, removeCartItem } from '../../api/cart';
+import { transformCartItems } from '../../utils/transform-cart';
+import { useNavigate } from 'react-router-dom';
 
 function PaymentMethods({ selectedItems, donation, selectedAddress }) {
   const { userId } = useUser();
+  const { cart, setCart } = useCart();
 
   const [loading, setLoading] = useState(false);
   const [orderAddress, setOrderAddress] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -27,16 +34,39 @@ function PaymentMethods({ selectedItems, donation, selectedAddress }) {
     if (selectedAddress) fetchAddress();
   }, [selectedAddress]);
 
+  async function removeCartItems() {
+    if (selectedItems.length === 0) return;
+
+    setLoading(true);
+    try {
+      for (const { product, selectedSize } of selectedItems) {
+        await removeCartItem({
+          userId,
+          productId: product._id,
+          size: selectedSize,
+        });
+      }
+      const newCart = await getCartItems(userId);
+      setCart(transformCartItems(newCart));
+    } catch (error) {
+      console.error('Error removing from the cart', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   async function handlePlaceOrder() {
-    console.log('dekho', { selectedAddress, donation, selectedItems });
+    const products = selectedItems.map(
+      ({ product, quantity, selectedSize }) => {
+        return {
+          product: product._id,
+          quantity,
+          size: selectedSize,
+        };
+      },
+    );
 
-    const products = selectedItems.map((product, quantity, selectedSize) => ({
-      product: product._id,
-      quantity,
-      size: selectedSize,
-    }));
-
-    const { finalPrice } = getPriceSummary(selectedItems);
+    const { finalPrice } = getPriceSummary(selectedItems, donation);
 
     const { addressLine, locality, city, state, pincode } = orderAddress;
     const addressString = `${addressLine}, ${locality}, ${city}, ${state} - ${pincode}`;
@@ -49,7 +79,10 @@ function PaymentMethods({ selectedItems, donation, selectedAddress }) {
     };
 
     const { order } = await placeOrder(newOrder);
-    console.log('oolalala', order);
+
+    // After the order is placed:
+    await removeCartItems(); // Remove the cart items which were ordered (selectedItems)
+    navigate('/'); // Navigate to the home page
   }
 
   const [payemntMethod, setPaymentMethod] = useState(null);

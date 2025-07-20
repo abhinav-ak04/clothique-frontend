@@ -1,8 +1,7 @@
 import axios from './axios';
 
-const token = localStorage.getItem('token');
-
 export async function getCartItems(userId) {
+  const token = localStorage.getItem('token');
   const response = await axios.get(`/cart/${userId}`, {
     headers: { Authorization: token },
   });
@@ -10,6 +9,7 @@ export async function getCartItems(userId) {
 }
 
 export async function addToCart({ userId, productId, quantity, size }) {
+  const token = localStorage.getItem('token');
   const response = await axios.post(
     `/cart/add`,
     {
@@ -26,6 +26,7 @@ export async function addToCart({ userId, productId, quantity, size }) {
 }
 
 export async function removeCartItem({ userId, productId, size }) {
+  const token = localStorage.getItem('token');
   const response = await axios.delete(`/cart/remove-item`, {
     data: {
       userId,

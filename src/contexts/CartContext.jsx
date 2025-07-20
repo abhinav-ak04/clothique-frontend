@@ -11,7 +11,8 @@ export function CartProvider({ children }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!userId) return;
+    const token = localStorage.getItem('token');
+    if (!userId || !token) return;
 
     setLoading(true);
 

@@ -1,5 +1,5 @@
 export const isEmailValid = (email, isRequired) => {
-  const trimmedEmail = email.trim();
+  const trimmedEmail = email ? email.trim() : '';
 
   if (!isRequired && !trimmedEmail) return;
   else if (!trimmedEmail) return 'Email ID is required';

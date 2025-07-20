@@ -15,12 +15,14 @@ function Profile() {
       setLoading(true);
       try {
         const { user } = await getUserData(userId);
-        console.log('kkkkkkk', user);
 
-        const transformedDob = getReadableDateString(user.dob);
-        const modifiedUserData = { ...user, dob: transformedDob };
-
-        setUserData(modifiedUserData);
+        if (user.dob) {
+          const transformedDob = getReadableDateString(user.dob);
+          const modifiedUserData = { ...user, dob: transformedDob };
+          setUserData(modifiedUserData);
+        } else {
+          setUserData(user);
+        }
       } catch (error) {
         console.error('Error fetching user details', error);
       } finally {
@@ -55,7 +57,7 @@ function Profile() {
           <div className="mb-6 flex text-zinc-900" key={idx}>
             <p className="w-48 pl-7">{label}</p>
             <p className="">
-              {userData[key].length > 0
+              {userData[key] && userData[key].length > 0
                 ? key === 'gender'
                   ? genderMap[userData[key]]
                   : userData[key]

@@ -1,8 +1,7 @@
 import axios from './axios';
 
-const token = localStorage.getItem('token');
-
 export async function getUserAddresses(userId) {
+  const token = localStorage.getItem('token');
   const response = await axios.get(`/addresses/user/${userId}`, {
     headers: { Authorization: token },
   });
@@ -10,6 +9,7 @@ export async function getUserAddresses(userId) {
 }
 
 export async function getAddressById(addressId) {
+  const token = localStorage.getItem('token');
   const response = await axios.get(`/addresses/${addressId}`, {
     headers: { Authorization: token },
   });
@@ -17,6 +17,7 @@ export async function getAddressById(addressId) {
 }
 
 export async function setAddressDefault(addressId, userId) {
+  const token = localStorage.getItem('token');
   const response = await axios.patch(
     `/addresses/${addressId}/set-default`,
     {
@@ -30,6 +31,7 @@ export async function setAddressDefault(addressId, userId) {
 }
 
 export async function addAddress(newAddress) {
+  const token = localStorage.getItem('token');
   const response = await axios.post('/addresses/add', newAddress, {
     headers: { Authorization: token },
   });

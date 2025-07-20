@@ -1,5 +1,5 @@
 export const isNameValid = (name, isRequired) => {
-  const trimmedName = name.trim();
+  const trimmedName = name ? name.trim() : '';
   const length = trimmedName.length;
 
   if (!isRequired && !trimmedName) return;

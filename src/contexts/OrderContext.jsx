@@ -10,6 +10,9 @@ export function OrderProvider({ children }) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!userId || !token) return;
+
     const fetchOrders = async () => {
       setLoading(true);
       try {

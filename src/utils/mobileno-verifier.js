@@ -1,5 +1,5 @@
 export const isMobileNoValid = (mobileNo, isRequired) => {
-  const trimmedMobileNo = mobileNo.trim();
+  const trimmedMobileNo = mobileNo ? mobileNo.trim() : '';
 
   if (!isRequired && !trimmedMobileNo) return;
   else if (!trimmedMobileNo) return 'Mobile number is required';

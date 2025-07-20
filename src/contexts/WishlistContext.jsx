@@ -12,7 +12,8 @@ export function WishlistProvider({ children }) {
   // console.log(wishlist);
 
   useEffect(() => {
-    if (!userId) return;
+    const token = localStorage.getItem('token');
+    if (!userId || !token) return;
 
     setLoading(true);
 

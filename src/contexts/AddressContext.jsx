@@ -13,6 +13,9 @@ export function AddressProvider({ children }) {
   const otherAddresses = addresses.filter((address) => !address.isDefault);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!userId || !token) return;
+
     const fetchAddresses = async () => {
       setLoading(true);
 

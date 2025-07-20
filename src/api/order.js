@@ -1,8 +1,7 @@
 import axios from './axios';
 
-const token = localStorage.getItem('token');
-
 export async function getAllOrders(userId) {
+  const token = localStorage.getItem('token');
   const response = await axios.get(`/orders/${userId}`, {
     headers: { Authorization: token },
   });
@@ -10,6 +9,7 @@ export async function getAllOrders(userId) {
 }
 
 export async function placeOrder(order) {
+  const token = localStorage.getItem('token');
   const response = await axios.post(`/orders/place`, order, {
     headers: { Authorization: token },
   });

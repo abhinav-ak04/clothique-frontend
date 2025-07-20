@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { CiHeart } from 'react-icons/ci';
 import { HiOutlineUser } from 'react-icons/hi';
 import { HiOutlineShoppingBag } from 'react-icons/hi2';
+import { NavLink } from 'react-router-dom';
 import Dropdown from './nav-action/Dropdown';
 import NavActionItems from './nav-action/NavActionsItems';
-import { NavLink } from 'react-router-dom';
 
 function NavAccount() {
   const [showDropdown, setShowDropdown] = useState(false);

@@ -13,8 +13,6 @@ function FilterSection({ section, filters }) {
 
   const items = Object.entries(filters[titleMap[section.title]]);
 
-  console.log('aaaaaaaaaaaaaaaa', items);
-
   const newTitle = capitalizeFirstLetter(title);
   const [searchParams, setSearchParams] = new useSearchParams();
 

@@ -7,7 +7,7 @@ import ContactUs from './pages/ContactUs';
 import Coupons from './pages/Coupons';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
-import Login from './pages/Login';
+import MobileAuth from './pages/MobileAuth';
 import MyAddresses from './pages/MyAddresses';
 import Orders from './pages/Orders';
 import PageNotFound from './pages/PageNotFound';
@@ -20,6 +20,8 @@ import Wishlist from './pages/Wishlist';
 import AccountLayout from './ui/layouts/AccountLayout';
 import AppLayout from './ui/layouts/AppLayout';
 import CartOrderLayout from './ui/layouts/CartOrderLayout';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 function App() {
   return (
@@ -29,7 +31,9 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="wishlist" element={<Wishlist />} />
           <Route path="contact-us" element={<ContactUs />} />
+          <Route path="mobile-auth" element={<MobileAuth />} />
           <Route path="login" element={<Login />} />
+          <Route path="signup" element={<Signup />} />
           <Route path="search" element={<QuerySearch />} />
           <Route path="product/:productId" element={<ProductDetails />} />
           <Route path="my" element={<AccountLayout />}>

@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const UserContext = createContext();
 
 export function UserProvider({ children }) {
-  const [userId, setUserId] = useState('685d2f0bd3ba8ba422ac627e');
+  const [userId, setUserId] = useState(localStorage.getItem('loggedInUser'));
   const [userData, setUserData] = useState(null);
 
   useEffect(() => {

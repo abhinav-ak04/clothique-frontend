@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FaCheck } from 'react-icons/fa6';
+import { useNavigate } from 'react-router-dom';
 import { getUserData, updateUserData } from '../api/user';
 import { useUser } from '../contexts/UserContext';
 import MobileInput from '../ui/shared/MobileInput';
@@ -12,7 +13,6 @@ import { isDOBValid } from '../utils/dob-verifier';
 import { isEmailValid } from '../utils/email-verifier';
 import { isMobileNoValid } from '../utils/mobileno-verifier';
 import { isNameValid } from '../utils/name-verifier';
-import { useNavigate } from 'react-router-dom';
 
 function ProfileEdit() {
   const { userId } = useUser();
@@ -40,10 +40,8 @@ function ProfileEdit() {
       setLoading(true);
       try {
         const { user } = await getUserData(userId);
-        console.log('kkkkkkk', user);
 
         const transformedDob = getReadableDateString(user.dob);
-        console.log('mmmmmmmmmmm', user.dob, transformedDob);
         const modifiedUserData = { ...user, dob: transformedDob };
 
         setUserData(modifiedUserData);

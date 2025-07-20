@@ -9,7 +9,7 @@ function Dropdown() {
 
   const navigate = useNavigate();
   function handleLoginButton() {
-    navigate('/login');
+    navigate('/mobile-auth');
   }
 
   return (

@@ -3,13 +3,14 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import TextInput from '../ui/shared/TextInput';
 import NavigateButton from '../ui/shared/buttons/NavigateButton';
 import { isPasswordValid } from '../utils/password-verifier';
-import { handleLogin } from '../api/auth';
+import { handleSignup } from '../api/auth';
 
-function Login() {
+function Signup() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [pass, setPass] = useState('');
+  const [newPass, setNewPass] = useState('');
+  const [confirmPass, setConfirmPass] = useState('');
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -22,20 +23,35 @@ function Login() {
   async function handleSubmit() {
     const newErrors = {};
 
-    const passError = isPasswordValid(pass);
+    const passError = isPasswordValid(newPass);
     if (passError) {
-      newErrors.pass = passError;
+      newErrors.newPass = passError;
+      setErrors(newErrors);
+      return;
+    }
+
+    const isPassEqual = newPass === confirmPass;
+    if (!isPassEqual) {
+      newErrors.confirmPass = "The passwords doesn't match";
       setErrors(newErrors);
       return;
     }
 
     try {
-      const { jwtToken, user } = await handleLogin(mobileNo, pass);
-      localStorage.setItem('token', jwtToken);
-      localStorage.setItem('loggedInUser', user._id);
-      navigate('/');
+      setLoading(true);
+
+      const newAuthData = {
+        mobileNo,
+        password: newPass,
+      };
+      console.log('Form submitted successfully', newAuthData);
+
+      const { auth } = await handleSignup(mobileNo, newPass);
+      console.log('User signed up successfully', auth.user);
+
+      navigate('/login', { state: { mobileNo } });
     } catch (error) {
-      console.error('Error logging in', error);
+      console.error('Error signing  up...', error);
     } finally {
       setLoading(false);
     }
@@ -47,7 +63,7 @@ function Login() {
         <div className="my-12 flex w-[450px] flex-col bg-white">
           <div className="mx-12 mb-12 flex flex-col">
             <h2 className="mt-8 mb-5 text-xl font-bold text-gray-700">
-              Login to your account
+              Signup to your account
             </h2>
 
             <TextInput
@@ -58,19 +74,29 @@ function Login() {
             />
 
             <TextInput
-              placeholder="Password"
+              placeholder="New Password"
               isRequired={true}
-              name="pass"
+              name="newPass"
               setErrors={setErrors}
-              value={pass}
-              onChange={(e) => setPass(e.target.value)}
-              errorMessage={errors.pass}
+              value={newPass}
+              onChange={(e) => setNewPass(e.target.value)}
+              errorMessage={errors.newPass}
             />
 
-            <NavigateButton onClick={handleSubmit}>LOGIN</NavigateButton>
+            <TextInput
+              placeholder="Confirm Password"
+              isRequired={true}
+              name="confirmPass"
+              setErrors={setErrors}
+              value={confirmPass}
+              onChange={(e) => setConfirmPass(e.target.value)}
+              errorMessage={errors.confirmPass}
+            />
+
+            <NavigateButton onClick={handleSubmit}>SIGNUP</NavigateButton>
 
             <p className="mt-5 align-middle text-sm text-gray-500">
-              Have trouble logging in?
+              Have trouble signing up?
               <a href="" className="text-core-theme inline text-sm font-bold">
                 {' '}
                 Get Help{' '}
@@ -83,4 +109,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;

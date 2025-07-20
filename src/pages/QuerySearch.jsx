@@ -18,17 +18,13 @@ function QuerySearch() {
 
   useEffect(() => {
     if (!searchParams.get('q')) console.error('No query string found');
-    console.log('q= ', searchParams.get('q'));
 
     const fetchProducts = async () => {
       setLoading(true);
-
       try {
         const queryString = searchParams.toString();
-        console.log('queryString: ', queryString);
-
         const { products } = await searchProducts(queryString);
-        console.log('products: ', products);
+
         setProducts(products);
         setFilters(getDynamicFilters(products));
       } catch (err) {

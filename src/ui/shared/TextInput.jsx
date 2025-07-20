@@ -13,7 +13,6 @@ function TextInput({
   onBlur,
 }) {
   const [isFocused, setIsFocused] = useState(false);
-
   return (
     <div className={`relative my-6`}>
       <input
@@ -40,7 +39,7 @@ function TextInput({
       />
 
       <p
-        className={`absolute left-3 bg-white px-1 text-[13px] text-zinc-400 duration-80 ${isFocused || value ? '-top-2.5 z-50' : 'top-3 -z-50'} ${isDisabled && 'cursor-not-allowed'} ${isFocused && 'text-zinc-700'}`}
+        className={`pointer-events-none absolute left-3 bg-white px-1 text-[13px] text-zinc-400 duration-80 ${isFocused || !!value ? '-top-2.5 z-50' : 'top-3'} ${isDisabled && 'cursor-not-allowed'} ${isFocused && 'text-zinc-700'}`}
       >
         {placeholder + (isRequired ? '*' : '')}
       </p>

@@ -1,4 +1,8 @@
+import { useState } from 'react';
 import AlterButton from '../shared/buttons/AlterButton';
+import { getUserAddresses, removeAddress } from '../../api/address';
+import { useAddresses } from '../../contexts/AddressContext';
+import { useUser } from '../../contexts/UserContext';
 
 function SelectCheckoutAddress({
   heading,
@@ -6,10 +10,32 @@ function SelectCheckoutAddress({
   selectedAddress,
   setSelectedAddress,
 }) {
+  const { setAddresses } = useAddresses();
+  const { userId } = useUser();
+  const [loading, setLoading] = useState(false);
+
   function handleChange(clickedId) {
     if (clickedId === selectedAddress) return;
     setSelectedAddress(clickedId);
   }
+
+  async function handleRemove() {
+    setLoading(true);
+
+    try {
+      const { deletedAddress } = await removeAddress(selectedAddress);
+      console.log('Address deleted successfully');
+
+      const { addresses } = await getUserAddresses(userId);
+      setAddresses(addresses);
+    } catch (error) {
+      console.error('Error removing address', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleEdit() {}
 
   const isSelected = (id) => id === selectedAddress;
 
@@ -68,8 +94,12 @@ function SelectCheckoutAddress({
                       • Pay on Delivery available
                     </p>
                     <div className="mt-4 flex items-center gap-5">
-                      <AlterButton isWide={true}>REMOVE</AlterButton>
-                      <AlterButton isWide={true}>EDIT</AlterButton>
+                      <AlterButton isWide={true} onClick={handleRemove}>
+                        REMOVE
+                      </AlterButton>
+                      <AlterButton isWide={true} onClick={handleEdit}>
+                        EDIT
+                      </AlterButton>
                     </div>
                   </>
                 )}

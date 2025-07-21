@@ -37,3 +37,11 @@ export async function addAddress(newAddress) {
   });
   return response.data;
 }
+
+export async function removeAddress(addressId) {
+  const token = localStorage.getItem('token');
+  const response = await axios.delete(`/addresses/remove/${addressId}`, {
+    headers: { Authorization: token },
+  });
+  return response.data;
+}

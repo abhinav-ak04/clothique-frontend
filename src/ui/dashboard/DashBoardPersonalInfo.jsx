@@ -1,7 +1,10 @@
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../contexts/UserContext';
 
 function DashBoardPersonalInfo() {
+  const { userData } = useUser();
   const navigate = useNavigate();
+
   return (
     <div className="mb-7 flex h-48 w-full bg-zinc-100 px-8 py-7">
       <img
@@ -18,7 +21,7 @@ function DashBoardPersonalInfo() {
             Edit Profile
           </button>
         </div>
-        <p className="mt-8 text-sm text-zinc-950">abhinavk.kumar04@gmail.com</p>
+        <p className="mt-8 text-sm text-zinc-950">{userData.email}</p>
       </div>
     </div>
   );

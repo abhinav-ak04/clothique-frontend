@@ -3,9 +3,7 @@ import OrderItemDesc from './OrderItemDesc';
 import OrderItemStatus from './OrderItemStatus';
 
 function OrderItem({ price, expectedDeliveryDate, brand, desc, size, img }) {
-  console.log('kkkkkkkk', price);
   const status = getOrderStatus(expectedDeliveryDate);
-  console.log('sssssssssss', status);
 
   return (
     <div className="mt-3 w-full bg-white px-5 py-1">

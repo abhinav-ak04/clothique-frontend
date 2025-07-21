@@ -84,7 +84,7 @@ function ResultProduct({ product }) {
         {isHover && (
           <div className="absolute top-63 w-full rounded-xs bg-white py-2">
             <div
-              className={`m-2 flex items-center justify-center gap-2 rounded-xs border-1 border-zinc-300 py-1.5 ${isInWishlist ? 'bg-gray-700 py-2' : 'hover:border-zinc-500'} `}
+              className={`m-2 flex items-center justify-center gap-2 rounded-xs border-1 border-zinc-300 py-1.5 ${isInWishlist ? 'bg-zinc-600 py-2' : 'hover:border-zinc-500'} `}
               onClick={(e) => handleAddToWishlist(e)}
             >
               {isInWishlist ? (

@@ -78,7 +78,7 @@ function AddressForm() {
         addressType,
         isDefault,
       };
-      const { addedAddress } = await addAddress(newAddress);
+      const { address: addedAddress } = await addAddress(newAddress);
 
       const newAddressList = [...addresses, addedAddress];
       setAddresses(newAddressList);
@@ -228,15 +228,15 @@ function AddressForm() {
         <div
           className="flex cursor-pointer items-center gap-2.5"
           onClick={() => {
-            addressType !== 'Office' && setAddressType('Office');
+            addressType !== 'Work' && setAddressType('Work');
           }}
         >
           <input
             type="radio"
-            checked={addressType === 'Office'}
+            checked={addressType === 'Work'}
             className={`checked:bg-core-theme outline-core-theme h-[11px] w-[11px] cursor-pointer appearance-none rounded-full outline-[1.5px] outline-offset-[3.2px] transition-opacity outline-solid checked:border-transparent`}
           />
-          <p className="text-zinc-700">Office</p>
+          <p className="text-zinc-700">Work</p>
         </div>
       </div>
       <label className="relative mb-14 block w-full cursor-pointer pl-7 text-[14px] leading-none">

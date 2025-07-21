@@ -3,7 +3,6 @@ import OrderItem from './past-orders/OrderItem';
 
 function PastOrders() {
   const { orders } = useOrder();
-  console.log('oooooooooo', orders);
 
   return (
     <div className="bg-zinc-100 px-3 py-4">

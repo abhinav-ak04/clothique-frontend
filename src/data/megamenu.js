@@ -75,7 +75,7 @@ export const megamenu = {
         { id: 3, name: 'T-Shirts', keyword: 't-shirt' },
         { id: 4, name: 'Jeans', keyword: 'jeans' },
         { id: 5, name: 'Trousers & Capris', keyword: 'trouser capri' },
-        { id: 5, name: 'Jumpsuits', keyword: 'jumpsuit' },
+        { id: 6, name: 'Jumpsuits', keyword: 'jumpsuit' },
       ],
     },
 
@@ -134,7 +134,7 @@ export const megamenu = {
         { id: 3, name: 'T-Shirts', keyword: 't-shirt' },
         { id: 4, name: 'Lehenga Choli', keyword: 'lehenga choli' },
         { id: 5, name: 'Kurta Sets', keyword: 'kurta set' },
-        { id: 5, name: 'Skirts & Shorts', keyword: 'skirt short' },
+        { id: 6, name: 'Skirts & Shorts', keyword: 'skirt short' },
       ],
     },
 

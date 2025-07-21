@@ -6,6 +6,7 @@ import { useUser } from '../../contexts/UserContext';
 import { getPriceSummary } from '../../utils/price-calculator';
 import NavigateButton from '../shared/buttons/NavigateButton';
 import { useCart } from '../../contexts/CartContext';
+import { useOrder } from '../../contexts/OrderContext';
 import { getCartItems, removeCartItem } from '../../api/cart';
 import { transformCartItems } from '../../utils/transform-cart';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +14,7 @@ import { useNavigate } from 'react-router-dom';
 function PaymentMethods({ selectedItems, donation, selectedAddress }) {
   const { userId } = useUser();
   const { cart, setCart } = useCart();
+  const { orders: currentOrders, setOrders } = useOrder();
 
   const [loading, setLoading] = useState(false);
   const [orderAddress, setOrderAddress] = useState(null);
@@ -82,6 +84,11 @@ function PaymentMethods({ selectedItems, donation, selectedAddress }) {
 
     // After the order is placed:
     await removeCartItems(); // Remove the cart items which were ordered (selectedItems)
+
+    // Update the Order-context
+    const newOrders = [...currentOrders, order];
+    setOrders(newOrders);
+
     navigate('/'); // Navigate to the home page
   }
 

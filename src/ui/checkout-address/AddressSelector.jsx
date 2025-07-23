@@ -1,11 +1,16 @@
 import { useEffect } from 'react';
 import { useAddresses } from '../../contexts/AddressContext';
 import AlterButton from '../shared/buttons/AlterButton';
+import Loader from '../shared/Loader';
 import AddressForm from './AddressForm';
 import SelectCheckoutAddress from './SelectCheckoutAddress';
 
 function AddressSelector({ selectedAddress, setSelectedAddress }) {
-  const { defaultAddress, otherAddresses } = useAddresses();
+  const {
+    defaultAddress,
+    otherAddresses,
+    loading: addressesLoading,
+  } = useAddresses();
 
   useEffect(() => {
     const fetchAddresses = () => {
@@ -15,6 +20,8 @@ function AddressSelector({ selectedAddress, setSelectedAddress }) {
   }, [defaultAddress, setSelectedAddress]);
 
   const isAddressesPresent = !!selectedAddress;
+
+  if (addressesLoading) return <Loader />;
 
   return (
     <div

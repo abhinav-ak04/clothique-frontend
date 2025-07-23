@@ -1,4 +1,5 @@
 import { BiDetail } from 'react-icons/bi';
+
 function ProductDescDetails({ details, sizeAndFit, materialAndCare, specs }) {
   return (
     <div className="mt-6 border-b-1 border-zinc-300 pb-5">

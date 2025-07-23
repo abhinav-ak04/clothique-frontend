@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useAddresses } from '../contexts/AddressContext.jsx';
-import AddressForm from '../ui/checkout-address/AddressForm.jsx';
 import NoAddressFallback from '../ui/my-addresses/NoAddressFallback';
 import SelectProfileAddress from '../ui/my-addresses/SelectProfileAddress';
-import Modal from '../ui/shared/Modal.jsx';
-import ModalAddressForm from '../ui/shared/ModalAddressForm.jsx';
+import Loader from '../ui/shared/Loader.jsx';
 
 function MyAddresses() {
-  const { defaultAddress, otherAddresses } = useAddresses();
+  const {
+    defaultAddress,
+    otherAddresses,
+    loading: addressesLoading,
+  } = useAddresses();
+
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -19,6 +22,8 @@ function MyAddresses() {
   }, [defaultAddress]);
 
   const isAddressesPresent = !!selectedAddress;
+
+  if (addressesLoading) return <Loader />;
 
   return (
     <div className="m-4 w-[730px]">

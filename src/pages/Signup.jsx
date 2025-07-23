@@ -4,6 +4,8 @@ import TextInput from '../ui/shared/TextInput';
 import NavigateButton from '../ui/shared/buttons/NavigateButton';
 import { isPasswordValid } from '../utils/password-verifier';
 import { handleSignup } from '../api/auth';
+import { useLoader } from '../contexts/LoaderContext';
+import Loader from '../ui/shared/Loader';
 
 function Signup() {
   const location = useLocation();
@@ -12,7 +14,7 @@ function Signup() {
   const [newPass, setNewPass] = useState('');
   const [confirmPass, setConfirmPass] = useState('');
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
   const mobileNo = location?.state?.mobileNo;
 
@@ -38,7 +40,7 @@ function Signup() {
     }
 
     try {
-      setLoading(true);
+      startLoading();
 
       const newAuthData = {
         mobileNo,
@@ -53,9 +55,11 @@ function Signup() {
     } catch (error) {
       console.error('Error signing  up...', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
+
+  if (isLoading) return <Loader />;
 
   return (
     <div>

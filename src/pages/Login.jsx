@@ -4,6 +4,9 @@ import TextInput from '../ui/shared/TextInput';
 import NavigateButton from '../ui/shared/buttons/NavigateButton';
 import { isPasswordValid } from '../utils/password-verifier';
 import { handleLogin } from '../api/auth';
+import { useUser } from '../contexts/UserContext';
+import { useLoader } from '../contexts/LoaderContext';
+import Loader from '../ui/shared/Loader';
 
 function Login() {
   const location = useLocation();
@@ -11,7 +14,9 @@ function Login() {
 
   const [pass, setPass] = useState('');
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+
+  const { setUserId, loading: userLoading } = useUser();
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
   const mobileNo = location?.state?.mobileNo;
 
@@ -29,17 +34,24 @@ function Login() {
       return;
     }
 
+    startLoading();
     try {
       const { jwtToken, user } = await handleLogin(mobileNo, pass);
+
       localStorage.setItem('token', jwtToken);
       localStorage.setItem('loggedInUser', user._id);
+
+      setUserId(user._id);
+
       navigate('/');
     } catch (error) {
       console.error('Error logging in', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
+
+  if (userLoading || isLoading) return <Loader />;
 
   return (
     <div>

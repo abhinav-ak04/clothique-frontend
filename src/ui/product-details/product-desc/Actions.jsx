@@ -1,25 +1,25 @@
 import { useState } from 'react';
 import { CiHeart } from 'react-icons/ci';
+import { FaArrowRight, FaHeart } from 'react-icons/fa';
 import { HiShoppingBag } from 'react-icons/hi2';
+import { useNavigate } from 'react-router-dom';
 import { addToCart } from '../../../api/cart';
 import { addToWishlist } from '../../../api/wishlist';
 import { useCart } from '../../../contexts/CartContext';
+import { useLoader } from '../../../contexts/LoaderContext';
 import { useUser } from '../../../contexts/UserContext';
 import { useWishlist } from '../../../contexts/WishlistContext';
 import { transformCartItems } from '../../../utils/transform-cart';
-import { FaHeart } from 'react-icons/fa';
-import { FaArrowRight } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import Loader from '../../shared/Loader';
 
 function ProductDescAction({ _id, sizeSelected }) {
-  const { userId } = useUser();
-  const { setCart } = useCart();
-  const { wishlist, setWishlist } = useWishlist();
+  const { userId, loading: userLoading } = useUser();
+  const { setCart, loading: cartLoading } = useCart();
+  const { wishlist, setWishlist, loading: wishlistLoading } = useWishlist();
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
   const navigate = useNavigate();
-
   const [isAddedToCart, setIsAddedToCart] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const isInWishlist = wishlist.some(({ product }) => product._id === _id);
 
@@ -33,7 +33,7 @@ function ProductDescAction({ _id, sizeSelected }) {
       return;
     }
 
-    setLoading(true);
+    startLoading();
     try {
       const { items } = await addToCart({
         userId,
@@ -46,21 +46,24 @@ function ProductDescAction({ _id, sizeSelected }) {
     } catch (error) {
       console.error('Error adding to bag', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
 
   async function handleAddToWishlist() {
-    setLoading(true);
+    startLoading();
     try {
       const newWishlist = await addToWishlist({ userId, productId: _id });
       setWishlist(newWishlist);
     } catch (error) {
       console.error('Error adding to bag', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
+
+  if (userLoading || cartLoading || wishlistLoading || isLoading)
+    return <Loader />;
 
   return (
     <div className="mt-7 flex items-center gap-3 border-b-1 border-zinc-300 pb-5">

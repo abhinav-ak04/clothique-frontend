@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import Header from './product-desc/Header';
-import Pricing from './product-desc/Pricing';
-import Sizing from './product-desc/Sizing';
+import { getDeliveryDateString } from '../../utils/date-utils';
 import Actions from './product-desc/Actions';
-import Summary from './product-desc/Summary';
 import Delivery from './product-desc/Delivery';
 import Details from './product-desc/Details';
+import Header from './product-desc/Header';
+import Pricing from './product-desc/Pricing';
 import Ratings from './product-desc/Ratings';
+import Sizing from './product-desc/Sizing';
+import Summary from './product-desc/Summary';
 
 function ProductDesc({ product }) {
   const {
@@ -34,15 +35,7 @@ function ProductDesc({ product }) {
   const [sizeSelected, setSizeSelected] = useState(null);
   const [pincode, setPincode] = useState('');
 
-  const today = new Date();
-  const deliveryDate = new Date();
-  deliveryDate.setDate(today.getDate() + deliveryDuration);
-
-  const day = deliveryDate.toLocaleString('en-US', { weekday: 'short' }); // "Mon", "Tue", etc.
-  const date = String(deliveryDate.getDate()).padStart(2, '0');
-  const month = deliveryDate.toLocaleString('en-US', { month: 'short' }); // "Jan", "Feb", etc.
-
-  const deliveryDateString = `${day}, ${date} ${month}`;
+  const { deliveryDateString } = getDeliveryDateString(deliveryDuration);
 
   return (
     <div className="ml-5 w-[42%]">

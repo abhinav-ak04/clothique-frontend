@@ -19,7 +19,7 @@ function CartItemCard({ item, cart, setCart, pincode }) {
     deliveryDuration,
   } = item.product;
 
-  const { quantity, isSelected, selectedSize } = item;
+  const { _id, quantity, isSelected, selectedSize } = item;
 
   function toggleSelected(itemId) {
     setCart((prevCart) =>
@@ -37,7 +37,7 @@ function CartItemCard({ item, cart, setCart, pincode }) {
     setCart((prevCart) => prevCart.filter((item) => item.productId !== itemId));
   }
 
-  const deliveryDateString = getDeliveryDateString(deliveryDuration);
+  const { deliveryDateString } = getDeliveryDateString(deliveryDuration);
 
   return (
     <div className="relative">

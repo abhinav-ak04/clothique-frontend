@@ -5,13 +5,15 @@ import MobileInput from '../ui/shared/MobileInput';
 import { useNavigate } from 'react-router-dom';
 import { isMobileNoValid } from '../utils/mobileno-verifier';
 import { isUserValid } from '../api/user';
+import { useLoader } from '../contexts/LoaderContext';
+import Loader from '../ui/shared/Loader';
 
 function MobileAuth() {
   const navigate = useNavigate();
 
   const [mobileNo, setMobileNo] = useState(null);
   const [errors, setErrors] = useState({});
-  const [loading, setLoading] = useState(false);
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
   async function handleSubmit() {
     const newErrors = {};
@@ -24,7 +26,7 @@ function MobileAuth() {
       return;
     }
 
-    setLoading(true);
+    startLoading();
     try {
       const { exists } = await isUserValid(mobileNo);
 
@@ -33,9 +35,11 @@ function MobileAuth() {
     } catch (error) {
       console.error('Error occured whil verifying mobile number', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
+
+  if (isLoading) return <Loader />;
 
   return (
     <div className="bg-login-background flex min-h-screen w-screen items-start justify-center">

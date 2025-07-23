@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
 import { getProductById } from '../api/product';
+import { useLoader } from '../contexts/LoaderContext';
 import ProductDesc from '../ui/product-details/ProductDesc';
 import ProductImages from '../ui/product-details/ProductImages';
+import Loader from '../ui/shared/Loader';
 
 function ProductDetails() {
   const { productId } = useParams();
   const location = useLocation();
 
+  const { isLoading, startLoading, stopLoading } = useLoader();
+
   const [product, setProduct] = useState(location.state?.product || null);
-  const [loading, setLoading] = useState(!product);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     if (product) return;
 
-    setLoading(true);
+    startLoading();
     const fetchProduct = async () => {
       try {
         const { product } = await getProductById(productId);
@@ -23,13 +26,14 @@ function ProductDetails() {
       } catch (e) {
         setError(`Error fetching product: ${e}`);
       } finally {
-        setLoading(false);
+        stopLoading();
       }
     };
     fetchProduct();
-  }, [productId, product]);
+  }, [productId]);
 
-  if (loading) return <p className="p-10 text-xl">Loading Details...</p>;
+  if (isLoading || !product) return <Loader />;
+
   if (error) return <p className="p-10 text-red-500">Error occured: {error}</p>;
 
   const { imgs, mainCategory, subCategory, individualCategory, gender } =

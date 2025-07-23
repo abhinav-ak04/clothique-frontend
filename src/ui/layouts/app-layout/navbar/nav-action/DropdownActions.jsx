@@ -1,15 +1,27 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../../../../contexts/UserContext';
+import Loader from '../../../../shared/Loader';
+import { useWishlist } from '../../../../../contexts/WishlistContext';
 
 function DropdownActions({ isBottom, links }) {
+  const { setUserId, setUserData, loading: userLoading } = useUser();
+  const { setWishlist, loading: wishlistLoading } = useWishlist();
   const navigate = useNavigate();
 
   async function handleClick(action) {
     if (action.name === 'Logout') {
       localStorage.removeItem('token');
       localStorage.removeItem('loggedInUser');
+
       navigate('/');
+
+      setUserId(null);
+      setUserData(null);
+      setWishlist([]);
     } else navigate(action.url);
   }
+
+  if (userLoading || wishlistLoading) return <Loader />;
 
   return (
     <div

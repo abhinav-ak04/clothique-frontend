@@ -22,10 +22,10 @@ function Dropdown() {
         <NavLink to="/my/profile">
           <div className="flex flex-col gap-[2px] border-b border-gray-200 py-2">
             <p className="text-[15px] font-bold text-gray-950">
-              Hello {userData.name ? userData.name : 'User'}
+              Hello {userData?.name ? userData?.name : 'User'}
             </p>
             <p className="text-[15px] font-medium text-gray-700">
-              {userData.mobileNo}
+              {userData?.mobileNo}
             </p>
           </div>
         </NavLink>

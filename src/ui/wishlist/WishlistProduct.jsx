@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import { addToCart } from '../../api/cart';
+import { removeWishlistItem } from '../../api/wishlist';
 import { useCart } from '../../contexts/CartContext';
+import { useLoader } from '../../contexts/LoaderContext';
 import { useUser } from '../../contexts/UserContext';
+import { useWishlist } from '../../contexts/WishlistContext';
 import { getSlicedString } from '../../utils/string-slicer';
 import { transformCartItems } from '../../utils/transform-cart';
-import { useState } from 'react';
-import { useWishlist } from '../../contexts/WishlistContext';
-import { removeWishlistItem } from '../../api/wishlist';
 
 function WishlistProduct({ product, onClick }) {
   const {
@@ -24,11 +24,10 @@ function WishlistProduct({ product, onClick }) {
   const { userId } = useUser();
   const { setCart } = useCart();
   const { setWishlist } = useWishlist();
-
-  const [loading, setLoading] = useState(false);
+  const { startLoading, stopLoading } = useLoader();
 
   async function handleAddToBag() {
-    setLoading(true);
+    startLoading();
 
     // Add that item to the cart
     try {
@@ -42,7 +41,7 @@ function WishlistProduct({ product, onClick }) {
       setCart(transformCartItems(items));
     } catch (error) {
       console.error('Error adding to cart', error);
-      setLoading(false);
+      stopLoading();
       return;
     }
 
@@ -53,12 +52,12 @@ function WishlistProduct({ product, onClick }) {
     } catch (error) {
       console.error('Error removing item from wishlist', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
 
   async function handleRemove() {
-    setLoading(true);
+    startLoading();
 
     try {
       const newWishlist = await removeWishlistItem({ userId, productId: _id });
@@ -66,7 +65,7 @@ function WishlistProduct({ product, onClick }) {
     } catch (error) {
       console.error('Error removing item from wishlist', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
 

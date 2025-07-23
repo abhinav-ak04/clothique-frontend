@@ -8,7 +8,7 @@ function DeliveryEstimate({ selectedItems }) {
       </h2>
       {selectedItems.map(({ _id, product }) => {
         const { imgs, deliveryDuration } = product;
-        const deliveryDateString = getDeliveryDateString(deliveryDuration);
+        const { deliveryDateString } = getDeliveryDateString(deliveryDuration);
         return (
           <div
             key={_id}

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import { getPriceSummary } from '../../utils/price-calculator';
 import ActionButton from '../shared/buttons/ActionButton';
 import NavigateButton from '../shared/buttons/NavigateButton';
-import { getPriceSummary } from '../../utils/price-calculator';
 
 function PriceSummary({
   selectedItems,

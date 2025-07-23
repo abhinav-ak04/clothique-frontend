@@ -4,15 +4,18 @@ import { HiReceiptRefund } from 'react-icons/hi2';
 import { MdCancel, MdLocalShipping } from 'react-icons/md';
 
 function OrderItemStatus({ status, price, expectedDeliveryDate }) {
+  console.log(status);
+
   const statusIconMap = {
     Shipped: MdLocalShipping,
-    'Out For Delivery': FaShippingFast,
+    'Out for Delivery': FaShippingFast,
     Delivered: FaHouseCircleCheck,
     Refunded: HiReceiptRefund,
     Cancelled: MdCancel,
   };
 
   const StatusIcon = statusIconMap[status];
+  console.log('aaaaaaaaa', StatusIcon);
 
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   const months = [

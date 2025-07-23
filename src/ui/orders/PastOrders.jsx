@@ -1,8 +1,11 @@
 import { useOrder } from '../../contexts/OrderContext';
+import Loader from '../shared/Loader';
 import OrderItem from './past-orders/OrderItem';
 
 function PastOrders() {
-  const { orders } = useOrder();
+  const { orders, loading: ordersLoading } = useOrder();
+
+  if (ordersLoading) return <Loader />;
 
   return (
     <div className="bg-zinc-100 px-3 py-4">

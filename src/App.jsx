@@ -1,15 +1,10 @@
-import { useEffect, useState } from 'react';
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-  useNavigate,
-} from 'react-router-dom';
+import { useEffect } from 'react';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 
 import './index.css';
 
 import RefreshHandler from '../RefreshHandler';
+import { useUser } from './contexts/UserContext';
 import Cart from './pages/Cart';
 import CheckoutAddress from './pages/CheckoutAddress';
 import Club from './pages/Club';
@@ -34,28 +29,31 @@ import AppLayout from './ui/layouts/AppLayout';
 import CartOrderLayout from './ui/layouts/CartOrderLayout';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem('token'),
-  );
+  // const [isAuthenticated, setIsAuthenticated] = useState(
+  //   !!localStorage.getItem('token'),
+  // );
+  const { userId, setUserId, setUserData } = useUser();
   const navigate = useNavigate();
 
   // Listen for force-logout event and redirect
   useEffect(() => {
     function handleForceLogout() {
-      setIsAuthenticated(false);
-      navigate('/login');
+      // setIsAuthenticated(false);
+      setUserId(null);
+      setUserData(null);
+      navigate('/mobile-auth');
     }
     window.addEventListener('force-logout', handleForceLogout);
     return () => window.removeEventListener('force-logout', handleForceLogout);
   }, [navigate]);
 
   const PrivateRoute = ({ element }) => {
-    return isAuthenticated ? element : <Navigate to="/mobile-auth" />;
+    return userId ? element : <Navigate to="/mobile-auth" />;
   };
 
   return (
     <>
-      <RefreshHandler setIsAuthenticated={setIsAuthenticated} />
+      <RefreshHandler />
       <Routes>
         <Route element={<AppLayout />}>
           <Route path="/" element={<Home />} />

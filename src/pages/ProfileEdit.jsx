@@ -13,11 +13,14 @@ import { isDOBValid } from '../utils/dob-verifier';
 import { isEmailValid } from '../utils/email-verifier';
 import { isMobileNoValid } from '../utils/mobileno-verifier';
 import { isNameValid } from '../utils/name-verifier';
+import { useLoader } from '../contexts/LoaderContext';
+import Loader from '../ui/shared/Loader';
 
 function ProfileEdit() {
-  const { userId } = useUser();
-  const navigate = useNavigate();
+  const { userId, loading: userLoading } = useUser();
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     name: '',
     mobileNo: '',
@@ -26,7 +29,6 @@ function ProfileEdit() {
     dob: '',
     alternateMobileNo: '',
   });
-  const [loading, setLoading] = useState(false);
 
   const [name, setName] = useState(null);
   const [mobileNo, setMobileNo] = useState(null);
@@ -37,7 +39,7 @@ function ProfileEdit() {
 
   useEffect(() => {
     const fetchUserDetails = async () => {
-      setLoading(true);
+      startLoading();
       try {
         const { user } = await getUserData(userId);
 
@@ -55,7 +57,7 @@ function ProfileEdit() {
       } catch (error) {
         console.error('Error occured fetching user data', error);
       } finally {
-        setLoading(false);
+        stopLoading();
       }
     };
 
@@ -101,7 +103,7 @@ function ProfileEdit() {
     }
 
     try {
-      setLoading(true);
+      startLoading();
 
       const newUserData = {
         name,
@@ -120,12 +122,12 @@ function ProfileEdit() {
     } catch (error) {
       console.error('Error updating user details...', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
     resetStates();
   }
 
-  if (!userData.mobileNo) return <p>Loading Current Data...</p>;
+  if (isLoading || userLoading || !userData.mobileNo) return <Loader />;
 
   return (
     <div className="m-4 w-[730px] border-1 border-zinc-200">

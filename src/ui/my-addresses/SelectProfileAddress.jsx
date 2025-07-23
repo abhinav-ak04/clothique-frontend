@@ -1,8 +1,9 @@
-import { useState } from 'react';
 import { setAddressDefault } from '../../api/address';
 import { useAddresses } from '../../contexts/AddressContext';
+import { useLoader } from '../../contexts/LoaderContext';
 import { useUser } from '../../contexts/UserContext';
 import { getSlicedString } from '../../utils/string-slicer';
+import Loader from '../shared/Loader';
 
 function SelectProfileAddress({
   heading,
@@ -10,10 +11,10 @@ function SelectProfileAddress({
   selectedAddress,
   setSelectedAddress,
 }) {
-  const { userId } = useUser();
-  const { addresses, setAddresses } = useAddresses();
+  const { userId, loading: userLoading } = useUser();
+  const { addresses, setAddresses, loading: addressesLoading } = useAddresses();
 
-  const [loading, setLoading] = useState(false);
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
   function handleChange(clickedId) {
     if (clickedId === selectedAddress) return;
@@ -23,7 +24,7 @@ function SelectProfileAddress({
   const isSelected = (id) => id === selectedAddress;
 
   async function handleSetDefault(addressId) {
-    setLoading(true);
+    startLoading();
     try {
       const { address } = await setAddressDefault(addressId, userId);
 
@@ -35,9 +36,11 @@ function SelectProfileAddress({
     } catch (error) {
       console.error('Error setting address default', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
+
+  if (userLoading || addressesLoading || isLoading) return <Loader />;
 
   return (
     <div>

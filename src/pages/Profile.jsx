@@ -1,37 +1,25 @@
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { getUserData } from '../api/user';
 import { useUser } from '../contexts/UserContext';
+import Loader from '../ui/shared/Loader';
 import { getReadableDateString } from '../utils/date-utils';
 
 function Profile() {
-  const { userId } = useUser();
+  const [user, setUser] = useState({});
 
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const { userData, loading } = useUser();
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      setLoading(true);
-      try {
-        const { user } = await getUserData(userId);
+    if (!userData) return;
 
-        if (user.dob) {
-          const transformedDob = getReadableDateString(user.dob);
-          const modifiedUserData = { ...user, dob: transformedDob };
-          setUserData(modifiedUserData);
-        } else {
-          setUserData(user);
-        }
-      } catch (error) {
-        console.error('Error fetching user details', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (userId) fetchUserDetails();
-  }, [userId]);
+    if (userData.dob) {
+      const transformedDob = getReadableDateString(userData.dob);
+      const modifiedUserData = { ...userData, dob: transformedDob };
+      setUser(modifiedUserData);
+    } else {
+      setUser(userData);
+    }
+  }, [userData]);
 
   const fieldMap = [
     { key: 'name', label: 'Full Name' },
@@ -45,7 +33,7 @@ function Profile() {
 
   const genderMap = { M: 'MALE', F: 'FEMALE' };
 
-  if (userData === null) return <p>Loading User data</p>;
+  if (!userData || loading) return <Loader />;
 
   return (
     <div className="m-4 flex w-[730px] justify-center border-1 border-zinc-200 py-10">
@@ -57,10 +45,10 @@ function Profile() {
           <div className="mb-6 flex text-zinc-900" key={idx}>
             <p className="w-48 pl-7">{label}</p>
             <p className="">
-              {userData[key] && userData[key].length > 0
+              {user[key] && user[key].length > 0
                 ? key === 'gender'
-                  ? genderMap[userData[key]]
-                  : userData[key]
+                  ? genderMap[user[key]]
+                  : user[key]
                 : '- not added -'}
             </p>
           </div>

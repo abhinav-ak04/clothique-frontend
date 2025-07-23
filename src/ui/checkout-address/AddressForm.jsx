@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import { addAddress } from '../../api/address';
 import { useAddresses } from '../../contexts/AddressContext';
+import { useLoader } from '../../contexts/LoaderContext';
 import { useUser } from '../../contexts/UserContext';
 import { isMobileNoValid } from '../../utils/mobileno-verifier';
 import { isNameValid } from '../../utils/name-verifier';
 import { toTitleCase } from '../../utils/title-case-generator';
 import NavigateButton from '../shared/buttons/NavigateButton';
+import Loader from '../shared/Loader';
 import TextInput from '../shared/TextInput';
 
 function AddressForm() {
-  const { userId } = useUser();
-  const { addresses, setAddresses } = useAddresses();
+  const { userId, loading: userLoading } = useUser();
+  const { addresses, setAddresses, loading: addressesLoading } = useAddresses();
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
   const [name, setName] = useState('');
   const [mobileNo, setMobileNo] = useState('');
@@ -23,8 +26,6 @@ function AddressForm() {
   const [isDefault, setIsDefault] = useState(true);
 
   const [errors, setErrors] = useState({});
-
-  const [loading, setLoading] = useState(false);
 
   const apiKey = import.meta.env.VITE_PINCODE_API_KEY;
   if (!apiKey) {
@@ -65,6 +66,7 @@ function AddressForm() {
       return;
     }
 
+    startLoading();
     try {
       const newAddress = {
         userId,
@@ -88,7 +90,7 @@ function AddressForm() {
     } catch (error) {
       console.error('Error adding new address', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
 
@@ -112,7 +114,7 @@ function AddressForm() {
       return;
     }
 
-    setLoading(true);
+    startLoading();
     try {
       const res = await fetch(
         `https://api.data.gov.in/resource/5c2f62fe-5afa-4119-a499-fec9d604d5bd?api-key=${apiKey}&format=json&filters[pincode]=${pincode}`,
@@ -134,9 +136,11 @@ function AddressForm() {
       newErrors.pincode = 'Error fetching city/state. Please try again.';
       clearCityState();
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
+
+  if (userLoading || addressesLoading || isLoading) return <Loader />;
 
   return (
     <form
@@ -251,7 +255,11 @@ function AddressForm() {
       </label>
 
       <div className="mx-3">
-        <NavigateButton type="submit" onClick={handleSubmit} disabled={loading}>
+        <NavigateButton
+          type="submit"
+          onClick={handleSubmit}
+          disabled={userLoading || addressesLoading || isLoading}
+        >
           SAVE ADDRESS
         </NavigateButton>
       </div>

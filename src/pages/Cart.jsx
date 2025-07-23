@@ -2,17 +2,23 @@ import { useState } from 'react';
 import { useCart } from '../contexts/CartContext';
 import CartList from '../ui/cart/CartList';
 import OrderSummary from '../ui/cart/OrderSummary';
+import Loader from '../ui/shared/Loader';
+import EmptyCart from '../ui/cart/EmptyCart';
 
 function Cart() {
-  const { cart, setCart } = useCart();
+  const { cart, setCart, loading: cartLoading } = useCart();
   const [pincode, setPincode] = useState('1');
 
   const selectedItems = cart.filter((item) => item.isSelected);
 
+  if (cartLoading) return <Loader />;
+
+  if (!cart || cart.length === 0) return <EmptyCart />;
+
   return (
     <div className="mx-35 flex px-2.5">
-      <div className="w-[63%] border-r-1 border-zinc-200 pt-8 pr-5">
-        <PincodeSelector pincode={pincode} setPincode={setPincode} />
+      <div className="w-[63%] border-r-1 border-zinc-200 pr-5">
+        {/* <PincodeSelector pincode={pincode} setPincode={setPincode} /> */}
         <CartList
           pincode={pincode}
           cart={cart}

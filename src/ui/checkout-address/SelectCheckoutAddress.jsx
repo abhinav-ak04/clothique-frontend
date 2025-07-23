@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import AlterButton from '../shared/buttons/AlterButton';
 import { getUserAddresses, removeAddress } from '../../api/address';
 import { useAddresses } from '../../contexts/AddressContext';
+import { useLoader } from '../../contexts/LoaderContext';
 import { useUser } from '../../contexts/UserContext';
+import AlterButton from '../shared/buttons/AlterButton';
+import Loader from '../shared/Loader';
 
 function SelectCheckoutAddress({
   heading,
@@ -10,9 +11,9 @@ function SelectCheckoutAddress({
   selectedAddress,
   setSelectedAddress,
 }) {
-  const { setAddresses } = useAddresses();
-  const { userId } = useUser();
-  const [loading, setLoading] = useState(false);
+  const { setAddresses, loading: addressesLoading } = useAddresses();
+  const { userId, loading: userLoading } = useUser();
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
   function handleChange(clickedId) {
     if (clickedId === selectedAddress) return;
@@ -20,7 +21,7 @@ function SelectCheckoutAddress({
   }
 
   async function handleRemove() {
-    setLoading(true);
+    startLoading();
 
     try {
       const { deletedAddress } = await removeAddress(selectedAddress);
@@ -31,13 +32,15 @@ function SelectCheckoutAddress({
     } catch (error) {
       console.error('Error removing address', error);
     } finally {
-      setLoading(false);
+      stopLoading();
     }
   }
 
   async function handleEdit() {}
 
   const isSelected = (id) => id === selectedAddress;
+
+  if (userLoading || addressesLoading || isLoading) return <Loader />;
 
   return (
     <div className="mb-6">

@@ -6,13 +6,15 @@ import Filters from '../ui/query-search/Filters';
 import SortSection from '../ui/query-search/SortSection';
 import ActionButton from '../ui/shared/buttons/ActionButton';
 import { getDynamicFilters } from '../utils/get-dynamic-filters';
+import { useLoader } from '../contexts/LoaderContext';
+import Loader from '../ui/shared/Loader';
 
 function QuerySearch() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [products, setProducts] = useState([]);
   const [filters, setFilters] = useState({});
-  const [loading, setLoading] = useState(false);
+  const { isLoading, startLoading, stopLoading } = useLoader();
 
   const nbHits = products.length;
 
@@ -20,7 +22,7 @@ function QuerySearch() {
     if (!searchParams.get('q')) console.error('No query string found');
 
     const fetchProducts = async () => {
-      setLoading(true);
+      startLoading();
       try {
         const queryString = searchParams.toString();
         const { products } = await searchProducts(queryString);
@@ -32,7 +34,7 @@ function QuerySearch() {
         setProducts([]);
         setFilters({});
       } finally {
-        setLoading(false);
+        stopLoading();
       }
     };
 
@@ -45,6 +47,8 @@ function QuerySearch() {
     if (query) newParams.set('q', query);
     setSearchParams(newParams);
   }
+
+  if (isLoading) return <Loader />;
 
   if (nbHits === 0) return <p className="m-3 text-xl">No products found...</p>;
 

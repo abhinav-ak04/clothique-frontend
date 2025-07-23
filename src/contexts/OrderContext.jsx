@@ -1,5 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { getAllOrders } from '../api/order';
+import Loader from '../ui/shared/Loader';
+import { useLoader } from './LoaderContext';
 import { useUser } from './UserContext';
 
 const OrderContext = createContext();

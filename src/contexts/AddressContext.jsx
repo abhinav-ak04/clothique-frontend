@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useUser } from './UserContext';
 import { getUserAddresses } from '../api/address';
+import { useUser } from './UserContext';
 
 const AddressContext = createContext();
 
@@ -18,7 +18,6 @@ export function AddressProvider({ children }) {
 
     const fetchAddresses = async () => {
       setLoading(true);
-
       try {
         const { addresses } = await getUserAddresses(userId);
         setAddresses(addresses);

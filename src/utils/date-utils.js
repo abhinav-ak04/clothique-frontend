@@ -3,13 +3,14 @@ export function getDeliveryDateString(deliveryDuration) {
   const deliveryDate = new Date();
   deliveryDate.setDate(today.getDate() + deliveryDuration);
 
-  const date = String(deliveryDate.getDate());
+  const day = deliveryDate.toLocaleString('en-US', { weekday: 'short' }); // "Mon", "Tue", etc.
+  const date = String(deliveryDate.getDate()).padStart(2, '0');
   const month = deliveryDate.toLocaleString('en-US', { month: 'short' }); // "Jan", "Feb", etc.
   const year = deliveryDate.getFullYear();
 
   const deliveryDateString = `${date} ${month} ${year}`;
 
-  return deliveryDateString;
+  return { day, date, month, year, deliveryDateString };
 }
 
 export function getReadableDateString(date) {
